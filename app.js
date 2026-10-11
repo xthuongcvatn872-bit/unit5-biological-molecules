@@ -23,10 +23,9 @@ const VOCABULARY_DATA = [
   { id: 18, code: "018_Gene", word: "Gene", ipa: "/dʒiːn/", defEn: "A DNA sequence encoding a functional product.", defVi: "Đoạn trình tự DNA mã hóa cho sản phẩm chức năng." },
   { id: 19, code: "019_Enzyme", word: "Enzyme", ipa: "/ˈenzaɪm/", defEn: "A biological catalyst accelerating chemical reactions.", defVi: "Chất xúc tác sinh học làm tăng tốc độ phản ứng." },
   { id: 20, code: "020_Ribozyme", word: "Ribozyme", ipa: "/ˈraɪbəzaɪm/", defEn: "An RNA molecule with catalytic activity.", defVi: "Phân tử RNA có hoạt tính xúc tác." },
-  { id: 21, code: "021_Purin", word: "Purine", ipa: "/ˈpjʊəriːn/", defEn: "A double-ring nitrogenous base group.", defVi: "Nhóm base chứa nitrogen có cấu trúc hai vòng." },
+ { id: 21, code: "021_Purine", word: "Purine", ipa: "/ˈpjʊəriːn/", defEn: "A double-ring nitrogenous base group.", defVi: "Nhóm base chứa nitrogen có cấu trúc hai vòng." },
   { id: 22, code: "022_Uric_acid", word: "Uric acid", ipa: "/ˌjʊərɪk ˈæsɪd/", defEn: "A waste product of purine breakdown.", defVi: "Sản phẩm bài tiết từ quá trình chuyển hóa purine." },
-  { id: 23, code: "023_Goute", word: "Gout", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
-];
+  { id: 23, code: "023_Gout", word: "Gout", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
 
 const ARENA_CONFIG = { validCode: "195", durationMinutes: 10 };
 
