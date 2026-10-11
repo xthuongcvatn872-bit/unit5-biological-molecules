@@ -1,7 +1,7 @@
-// Dán link Web App URL Google Script của thầy/cô vào đây (nếu có):
+// Dán link Web App URL Google Script của thầy/cô vào đây:
 const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby_SAMPLE_CODE/exec";
 
-// 23 Thuật ngữ Unit 5: Khớp 100% với tên file gạch dưới trên GitHub
+// 23 Thuật ngữ Unit 5: Biological Molecules
 const VOCABULARY_DATA = [
   { id: 1, code: "001_Ribonucleic_acid", word: "Ribonucleic acid", ipa: "/ˌraɪbəʊnjuːˌkliːɪk ˈæsɪd/", defEn: "A nucleic acid essential for protein synthesis.", defVi: "Nucleic acid cần cho quá trình tổng hợp protein." },
   { id: 2, code: "002_DNA", word: "DNA", ipa: "/ˌdiː.enˈeɪ/", defEn: "Molecule carrying genetic instructions for living organisms.", defVi: "Phân tử mang thông tin di truyền của sinh vật." },
@@ -23,10 +23,11 @@ const VOCABULARY_DATA = [
   { id: 18, code: "018_Gene", word: "Gene", ipa: "/dʒiːn/", defEn: "A DNA sequence encoding a functional product.", defVi: "Đoạn trình tự DNA mã hóa cho sản phẩm chức năng." },
   { id: 19, code: "019_Enzyme", word: "Enzyme", ipa: "/ˈenzaɪm/", defEn: "A biological catalyst accelerating chemical reactions.", defVi: "Chất xúc tác sinh học làm tăng tốc độ phản ứng." },
   { id: 20, code: "020_Ribozyme", word: "Ribozyme", ipa: "/ˈraɪbəzaɪm/", defEn: "An RNA molecule with catalytic activity.", defVi: "Phân tử RNA có hoạt tính xúc tác." },
- { id: 21, code: "021_Purine", word: "Purine", ipa: "/ˈpjʊəriːn/", defEn: "A double-ring nitrogenous base group.", defVi: "Nhóm base chứa nitrogen có cấu trúc hai vòng." },
+  { id: 21, code: "021_Purine", word: "Purine", ipa: "/ˈpjʊəriːn/", defEn: "A double-ring nitrogenous base group.", defVi: "Nhóm base chứa nitrogen có cấu trúc hai vòng." },
   { id: 22, code: "022_Uric_acid", word: "Uric acid", ipa: "/ˌjʊərɪk ˈæsɪd/", defEn: "A waste product of purine breakdown.", defVi: "Sản phẩm bài tiết từ quá trình chuyển hóa purine." },
   { id: 23, code: "023_Gout", word: "Gout", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
 ];
+
 const ARENA_CONFIG = { validCode: "195", durationMinutes: 10 };
 
 const ARENA_QUESTIONS = [
@@ -44,7 +45,6 @@ const ARENA_QUESTIONS = [
 
 let currentUser = { name: "", className: "" };
 let currentVocabIndex = 0;
-let userSpelling = [];
 let reviewQuestions = [];
 let reviewAnswers = {};
 let arenaUserAnswers = {};
@@ -82,9 +82,9 @@ function fetchVisitorCount() {
 function renderVocabCard(index) {
   currentVocabIndex = index;
   const item = VOCABULARY_DATA[index];
-  document.getElementById("vocab-counter").innerText = `Thuật ngữ ${index + 1} / ${VOCABULARY_DATA.length}`;
+  document.getElementById("vocab-counter").innerText = `${index + 1} / ${VOCABULARY_DATA.length}`;
   
-  // Tải file trực tiếp: ảnh .png, audio .mp3, video .mp4 (dùng dấu gạch dưới)
+  // Nạp ảnh, audio, video
   document.getElementById("vocab-img").src = `${item.code}.png`;
   
   const audioElem = document.getElementById("vocab-audio");
@@ -95,53 +95,51 @@ function renderVocabCard(index) {
   videoElem.src = `${item.code}.mp4`;
   videoElem.load();
   
+  // Trạng thái nút điều hướng
   document.getElementById("btn-prev-vocab").disabled = (index === 0);
+  document.getElementById("btn-prev-vocab").style.opacity = (index === 0) ? "0.4" : "1";
+  
   document.getElementById("btn-next-vocab").disabled = (index === VOCABULARY_DATA.length - 1);
+  document.getElementById("btn-next-vocab").style.opacity = (index === VOCABULARY_DATA.length - 1) ? "0.4" : "1";
 
-  initScrambleGame(item.word);
+  // Hiển thị các huy hiệu chữ cái xáo trộn (badges)
+  renderScrambleBadges(item.word);
 }
 
-function initScrambleGame(rawWord) {
+function renderScrambleBadges(rawWord) {
   const cleanWord = rawWord.toUpperCase().replace(/\s+/g, '');
   const shuffled = cleanWord.split('').sort(() => Math.random() - 0.5);
-  userSpelling = [];
   
-  const tileContainer = document.getElementById("letter-tiles");
-  const slotContainer = document.getElementById("target-slots");
-  tileContainer.innerHTML = "";
-  slotContainer.innerHTML = "";
-  document.getElementById("scramble-feedback").innerHTML = "";
+  const container = document.getElementById("scramble-badges-container");
+  container.innerHTML = "";
   
-  for (let i = 0; i < cleanWord.length; i++) {
-    const slot = document.createElement("div");
-    slot.className = "target-slot";
-    slot.id = `slot-${i}`;
-    slotContainer.appendChild(slot);
+  shuffled.forEach(char => {
+    const badge = document.createElement("div");
+    badge.className = "letter-badge";
+    badge.innerText = char;
+    container.appendChild(badge);
+  });
+  
+  // Reset ô nhập và phản hồi
+  document.getElementById("input-check-word").value = "";
+  document.getElementById("check-feedback").innerHTML = "";
+}
+
+function checkUserSpelling() {
+  const inputVal = document.getElementById("input-check-word").value.trim().toUpperCase().replace(/\s+/g, '');
+  const correctVal = VOCABULARY_DATA[currentVocabIndex].word.toUpperCase().replace(/\s+/g, '');
+  const feedback = document.getElementById("check-feedback");
+  
+  if (!inputVal) {
+    feedback.innerHTML = "<span style='color:#ef4444;'>Vui lòng gõ từ hoàn chỉnh vào ô trên!</span>";
+    return;
   }
   
-  shuffled.forEach((char, idx) => {
-    const btn = document.createElement("button");
-    btn.className = "letter-tile";
-    btn.innerText = char;
-    btn.id = `tile-${idx}`;
-    btn.onclick = () => {
-      if (userSpelling.length >= cleanWord.length) return;
-      btn.classList.add("used");
-      const currentSlotIndex = userSpelling.length;
-      userSpelling.push({ char, tileId: `tile-${idx}` });
-      document.getElementById(`slot-${currentSlotIndex}`).innerText = char;
-      
-      if (userSpelling.length === cleanWord.length) {
-        const spelled = userSpelling.map(u => u.char).join("");
-        if (spelled === cleanWord) {
-          document.getElementById("scramble-feedback").innerHTML = "<b style='color:#059669;'>🎉 Chính xác! Tuyệt vời!</b>";
-        } else {
-          document.getElementById("scramble-feedback").innerHTML = "<b style='color:#ef4444;'>❌ Chưa chính xác, hãy bấm 'Xếp lại'!</b>";
-        }
-      }
-    };
-    tileContainer.appendChild(btn);
-  });
+  if (inputVal === correctVal) {
+    feedback.innerHTML = "<span style='color:#059669;'>🎉 Chính xác! Em đã nhớ đúng từ vựng này.</span>";
+  } else {
+    feedback.innerHTML = "<span style='color:#ef4444;'>❌ Chưa chính xác, hãy thử lại nhé!</span>";
+  }
 }
 
 function generateReviewQuiz() {
@@ -169,8 +167,11 @@ function renderReviewQuizUI() {
   
   reviewQuestions.forEach((q, idx) => {
     const box = document.createElement("div");
-    box.className = "card-box";
-    box.style.marginBottom = "20px";
+    box.style.background = "#f8fafc";
+    box.style.border = "1.5px solid #e2e8f0";
+    box.style.borderRadius = "16px";
+    box.style.padding = "18px";
+    box.style.marginBottom = "18px";
     
     let html = `<h4>Câu ${idx + 1}: `;
     if (q.type === 'scramble') {
@@ -207,7 +208,7 @@ function submitReviewQuiz() {
     const correctAns = q.item.word.toUpperCase().replace(/\s+/g, '');
     if (userAns === correctAns) score++;
   });
-  alert(`Kết quả bài tập 20 câu: Đúng ${score} / 20 câu.`);
+  alert(`Kết quả bài tập tổng hợp: Đúng ${score} / 20 câu.`);
   showScreen("screen-vocab");
 }
 
@@ -246,8 +247,11 @@ function renderArenaQuestions() {
   
   ARENA_QUESTIONS.forEach((q, index) => {
     const qBox = document.createElement("div");
-    qBox.className = "card-box";
-    qBox.style.marginBottom = "20px";
+    qBox.style.background = "#f8fafc";
+    qBox.style.border = "1.5px solid #e2e8f0";
+    qBox.style.borderRadius = "16px";
+    qBox.style.padding = "18px";
+    qBox.style.marginBottom = "18px";
     
     let html = `<h4>Câu ${index + 1}: ${q.question}</h4>`;
     if (q.type === "mcq") {
@@ -335,10 +339,7 @@ function setupEventListeners() {
     showScreen("screen-arena-lobby");
   };
 
-  document.getElementById("btn-play-audio").onclick = () => {
-    document.getElementById("vocab-audio").play();
-  };
-
+  // Nút Previous & Next
   document.getElementById("btn-prev-vocab").onclick = () => {
     if (currentVocabIndex > 0) renderVocabCard(currentVocabIndex - 1);
   };
@@ -347,9 +348,11 @@ function setupEventListeners() {
     if (currentVocabIndex < VOCABULARY_DATA.length - 1) renderVocabCard(currentVocabIndex + 1);
   };
 
-  document.getElementById("btn-reset-scramble").onclick = () => {
-    initScrambleGame(VOCABULARY_DATA[currentVocabIndex].word);
-  };
+  // Nút Kiểm tra và phím Enter trong ô gõ từ
+  document.getElementById("btn-check-word").onclick = checkUserSpelling;
+  document.getElementById("input-check-word").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") checkUserSpelling();
+  });
 
   document.getElementById("btn-open-review").onclick = generateReviewQuiz;
   document.getElementById("btn-submit-review").onclick = () => {
