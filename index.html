@@ -551,3 +551,304 @@
         { id: 7, type: "tf", question: "Nhận định: Ở tRNA, các vùng tự bắt đôi liên kết theo kiểu A – U và G – C.", answer: "Đúng" },
         { id: 8, type: "tf", question: "Nhận định: So với protein, phân tử DNA đảm nhận nhiều loại chức năng hơn.", answer: "Sai" },
         { id: 9, type: "num", question: "Đường ribose trong đơn phân nucleotide của RNA có bao nhiêu nguyên tử carbon?", answer: "5" },
+        { id: 10, type: "num", question: "Phân tử DNA thường gồm 2 chuỗi polynucleotide, vậy RNA thông thường được cấu tạo từ bao nhiêu chuỗi polynucleotide?", answer: "1" }
+      ]
+    };
+
+    var currentUser = { name: "Nguyễn Minh Thư", className: "10A1" };
+    var currentVocabIndex = 0;
+    var reviewQuestions = [];
+    var reviewAnswers = {};
+    
+    var activeExamKey = "";
+    var activeQuestions = [];
+    var arenaUserAnswers = {};
+    var arenaTimerInterval = null;
+    var arenaTimeRemaining = ARENA_DURATION_MINUTES * 60;
+    var enteredRoomCode = "";
+
+    function showScreen(screenId) {
+      var panels = document.querySelectorAll(".screen-panel");
+      for (var i = 0; i < panels.length; i++) {
+        panels[i].classList.remove("active");
+      }
+      var target = document.getElementById(screenId);
+      if (target) target.classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    function handleStartLearning() {
+      var nameVal = document.getElementById("student-name").value.trim();
+      var classVal = document.getElementById("student-class").value.trim();
+      currentUser.name = nameVal || "Nguyễn Minh Thư";
+      currentUser.className = classVal || "10A1";
+      showScreen("screen-vocab");
+      renderVocabCard(0);
+    }
+
+    function openArenaLobby() {
+      var nameVal = document.getElementById("student-name").value.trim();
+      var classVal = document.getElementById("student-class").value.trim();
+      currentUser.name = nameVal || currentUser.name || "Nguyễn Minh Thư";
+      currentUser.className = classVal || currentUser.className || "10A1";
+      document.getElementById("arena-user-display").innerText = "Thí sinh: " + currentUser.name + " - Lớp: " + currentUser.className;
+      showScreen("screen-arena-lobby");
+    }
+
+    function renderVocabCard(index) {
+      currentVocabIndex = index;
+      var item = VOCABULARY_DATA[index];
+      document.getElementById("vocab-counter").innerText = (index + 1) + " / " + VOCABULARY_DATA.length;
+      
+      document.getElementById("vocab-img").src = item.code + ".png";
+      
+      var audioElem = document.getElementById("vocab-audio");
+      audioElem.src = item.code + ".mp3";
+      audioElem.load();
+      
+      var videoElem = document.getElementById("vocab-video");
+      videoElem.src = item.code + ".mp4";
+      videoElem.load();
+      
+      var btnPrev = document.getElementById("btn-prev-vocab");
+      btnPrev.disabled = (index === 0);
+      btnPrev.style.opacity = (index === 0) ? "0.4" : "1";
+      
+      var btnNext = document.getElementById("btn-next-vocab");
+      btnNext.disabled = (index === VOCABULARY_DATA.length - 1);
+      btnNext.style.opacity = (index === VOCABULARY_DATA.length - 1) ? "0.4" : "1";
+
+      renderScrambleBadges(item.word);
+    }
+
+    function goToPrevVocab() {
+      if (currentVocabIndex > 0) renderVocabCard(currentVocabIndex - 1);
+    }
+
+    function goToNextVocab() {
+      if (currentVocabIndex < VOCABULARY_DATA.length - 1) renderVocabCard(currentVocabIndex + 1);
+    }
+
+    function renderScrambleBadges(rawWord) {
+      var cleanWord = rawWord.toUpperCase().replace(/\s+/g, '');
+      var shuffled = cleanWord.split('').sort(function() { return Math.random() - 0.5; });
+      
+      var container = document.getElementById("scramble-badges-container");
+      container.innerHTML = "";
+      
+      shuffled.forEach(function(char) {
+        var badge = document.createElement("div");
+        badge.className = "letter-badge";
+        badge.innerText = char;
+        container.appendChild(badge);
+      });
+      
+      document.getElementById("input-check-word").value = "";
+      document.getElementById("check-feedback").innerHTML = "";
+    }
+
+    function checkUserSpelling() {
+      var inputVal = document.getElementById("input-check-word").value.trim().toUpperCase().replace(/\s+/g, '');
+      var correctVal = VOCABULARY_DATA[currentVocabIndex].word.toUpperCase().replace(/\s+/g, '');
+      var feedback = document.getElementById("check-feedback");
+      
+      if (!inputVal) {
+        feedback.innerHTML = "<span style='color:#ef4444;'>Vui lòng gõ từ hoàn chỉnh vào ô trên!</span>";
+        return;
+      }
+      
+      if (inputVal === correctVal) {
+        feedback.innerHTML = "<span style='color:#059669;'>🎉 Chính xác! Em đã nhớ đúng từ vựng này.</span>";
+      } else {
+        feedback.innerHTML = "<span style='color:#ef4444;'>❌ Chưa chính xác, hãy thử lại nhé!</span>";
+      }
+    }
+
+    function generateReviewQuiz() {
+      var shuffledVocab = VOCABULARY_DATA.slice().sort(function() { return Math.random() - 0.5; });
+      var selected20 = shuffledVocab.slice(0, 20);
+      reviewQuestions = [];
+      reviewAnswers = {};
+      
+      for (var i = 0; i < 10; i++) reviewQuestions.push({ type: 'scramble', item: selected20[i] });
+      for (var i = 10; i < 15; i++) reviewQuestions.push({ type: 'fill', item: selected20[i] });
+      for (var i = 15; i < 20; i++) {
+        var correct = selected20[i];
+        var wrongOptions = VOCABULARY_DATA.filter(function(v) { return v.id !== correct.id; }).sort(function() { return Math.random() - 0.5; }).slice(0, 3);
+        var options = [correct].concat(wrongOptions).sort(function() { return Math.random() - 0.5; });
+        reviewQuestions.push({ type: 'mcq_def', item: correct, options: options });
+      }
+      
+      renderReviewQuizUI();
+      showScreen("screen-review-quiz");
+    }
+
+    function renderReviewQuizUI() {
+      var container = document.getElementById("review-questions-list");
+      container.innerHTML = "";
+      
+      reviewQuestions.forEach(function(q, idx) {
+        var box = document.createElement("div");
+        box.style.background = "#f8fafc";
+        box.style.border = "1.5px solid #e2e8f0";
+        box.style.borderRadius = "16px";
+        box.style.padding = "18px";
+        box.style.marginBottom = "18px";
+        
+        var html = "<h4>Câu " + (idx + 1) + ": ";
+        if (q.type === 'scramble') {
+          var cleanWord = q.item.word.toUpperCase().replace(/\s+/g, '');
+          var letters = cleanWord.split('').sort(function() { return Math.random() - 0.5; }).join(" - ");
+          html += "Sắp xếp chữ cái: <span style='color:var(--primary); font-size:1.1rem; letter-spacing:2px;'>[ " + letters + " ]</span></h4>";
+          html += "<p style='font-size:0.9rem; color:#64748b; margin:6px 0;'>Gợi ý: " + q.item.defVi + "</p>";
+          html += "<input type='text' class='form-control' placeholder='Nhập từ...' onchange='reviewAnswers[" + idx + "] = this.value.trim().toUpperCase()'>";
+        } else if (q.type === 'fill') {
+          var cleanWord = q.item.word.toUpperCase();
+          var masked = cleanWord.length > 4 ? cleanWord[0] + " _ " + cleanWord.slice(2, -1) + " _ " : cleanWord[0] + " _ " + cleanWord.slice(2);
+          html += "Điền từ còn thiếu: <b style='letter-spacing:2px; color:var(--secondary); font-size:1.1rem;'>" + masked + "</b></h4>";
+          html += "<p style='font-size:0.9rem; color:#64748b; margin:6px 0;'>Định nghĩa: " + q.item.defEn + "</p>";
+          html += "<input type='text' class='form-control' placeholder='Nhập từ...' onchange='reviewAnswers[" + idx + "] = this.value.trim().toUpperCase()'>";
+        } else if (q.type === 'mcq_def') {
+          html += "Chọn thuật ngữ đúng với định nghĩa:</h4>";
+          html += "<p style='margin:8px 0; font-weight:600; color:#0284c7;'>\"" + q.item.defEn + "\"</p>";
+          html += "<div class='quiz-options'>";
+          q.options.forEach(function(opt) {
+            html += "<button class='quiz-opt-btn' onclick='reviewAnswers[" + idx + "] = \"" + opt.word + "\"; this.parentElement.querySelectorAll(\".quiz-opt-btn\").forEach(function(b){b.classList.remove(\"selected\")}); this.classList.add(\"selected\");'>" + opt.word + "</button>";
+          });
+          html += "</div>";
+        }
+        
+        box.innerHTML = html;
+        container.appendChild(box);
+      });
+    }
+
+    function submitReviewQuiz() {
+      var score = 0;
+      reviewQuestions.forEach(function(q, idx) {
+        var userAns = (reviewAnswers[idx] || "").replace(/\s+/g, '');
+        var correctAns = q.item.word.toUpperCase().replace(/\s+/g, '');
+        if (userAns === correctAns) score++;
+      });
+      alert("Kết quả bài tập tổng hợp: Đúng " + score + " / 20 câu.");
+      showScreen("screen-vocab");
+    }
+
+    function startArenaContest() {
+      var code = document.getElementById("arena-code-input").value.trim().toUpperCase();
+      
+      if (VALID_CODES.indexOf(code) === -1) {
+        alert("⚠️ Mã phòng thi không đúng! Vui lòng nhập mã lớp của bạn (10A1, 10A2 hoặc TUDO).");
+        return;
+      }
+      
+      enteredRoomCode = code;
+      
+      var examKeys = Object.keys(ARENA_EXAMS);
+      activeExamKey = examKeys[Math.floor(Math.random() * examKeys.length)];
+      activeQuestions = ARENA_EXAMS[activeExamKey];
+      
+      document.getElementById("arena-exam-name").innerText = "(" + activeExamKey + ")";
+      
+      arenaUserAnswers = {};
+      arenaTimeRemaining = ARENA_DURATION_MINUTES * 60;
+      startArenaTimer();
+      renderArenaQuestions();
+      showScreen("screen-arena-board");
+    }
+
+    function startArenaTimer() {
+      clearInterval(arenaTimerInterval);
+      arenaTimerInterval = setInterval(function() {
+        arenaTimeRemaining--;
+        var mins = Math.floor(arenaTimeRemaining / 60);
+        var secs = arenaTimeRemaining % 60;
+        document.getElementById("arena-timer").innerText = "⏱️ " + mins + ":" + (secs < 10 ? '0' : '') + secs;
+        
+        if (arenaTimeRemaining <= 0) {
+          clearInterval(arenaTimerInterval);
+          alert("Hết giờ thi! Tự động nộp bài.");
+          submitArena();
+        }
+      }, 1000);
+    }
+
+    function renderArenaQuestions() {
+      var container = document.getElementById("arena-questions-container");
+      container.innerHTML = "";
+      
+      activeQuestions.forEach(function(q, index) {
+        var qBox = document.createElement("div");
+        qBox.style.background = "#f8fafc";
+        qBox.style.border = "1.5px solid #e2e8f0";
+        qBox.style.borderRadius = "16px";
+        qBox.style.padding = "18px";
+        qBox.style.marginBottom = "18px";
+        
+        var html = "<h4>Câu " + (index + 1) + ": " + q.question + "</h4>";
+        if (q.type === "mcq") {
+          html += "<div class='quiz-options'>";
+          q.options.forEach(function(opt) {
+            html += "<button class='quiz-opt-btn' onclick='arenaUserAnswers[" + q.id + "]=\"" + opt + "\"; this.parentElement.querySelectorAll(\".quiz-opt-btn\").forEach(function(b){b.classList.remove(\"selected\")}); this.classList.add(\"selected\");'>" + opt + "</button>";
+          });
+          html += "</div>";
+        } else if (q.type === "tf") {
+          html += "<div style='display:flex; gap:12px; margin-top:14px;'>" +
+                  "<button class='quiz-opt-btn' style='flex:1; text-align:center;' onclick='arenaUserAnswers[" + q.id + "]= \"Đúng\"; this.parentElement.querySelectorAll(\".quiz-opt-btn\").forEach(function(b){b.classList.remove(\"selected\")}); this.classList.add(\"selected\");'>✔️ ĐÚNG</button>" +
+                  "<button class='quiz-opt-btn' style='flex:1; text-align:center;' onclick='arenaUserAnswers[" + q.id + "]= \"Sai\"; this.parentElement.querySelectorAll(\".quiz-opt-btn\").forEach(function(b){b.classList.remove(\"selected\")}); this.classList.add(\"selected\");'>✖️ SAI</button>" +
+                  "</div>";
+        } else if (q.type === "num") {
+          html += "<div style='margin-top:14px;'>" +
+                  "<input type='number' class='form-control' placeholder='Nhập kết quả số...' onchange='arenaUserAnswers[" + q.id + "] = this.value.trim()'>" +
+                  "</div>";
+        }
+        
+        qBox.innerHTML = html;
+        container.appendChild(qBox);
+      });
+    }
+
+    function submitArena() {
+      clearInterval(arenaTimerInterval);
+      var correctCount = 0;
+      
+      activeQuestions.forEach(function(q) {
+        var userA = String(arenaUserAnswers[q.id] || "").trim().toLowerCase();
+        var trueA = String(q.answer).trim().toLowerCase();
+        if (userA === trueA) {
+          correctCount++;
+        }
+      });
+      
+      var score = (correctCount * 1.0).toFixed(1);
+      var timeSpentMins = Math.floor((ARENA_DURATION_MINUTES * 60 - arenaTimeRemaining) / 60);
+      var timeSpentSecs = (ARENA_DURATION_MINUTES * 60 - arenaTimeRemaining) % 60;
+      var timeSpentStr = timeSpentMins + "m " + timeSpentSecs + "s";
+      
+      document.getElementById("arena-result-exam-label").innerText = "Đề thi: " + activeExamKey;
+      document.getElementById("arena-score-display").innerText = correctCount + " / 10";
+      document.getElementById("arena-mark-display").innerText = "Điểm: " + score;
+      showScreen("screen-arena-result");
+      
+      if (GOOGLE_SHEET_API_URL.indexOf("SAMPLE_CODE") === -1) {
+        fetch(GOOGLE_SHEET_API_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: currentUser.name,
+            className: currentUser.className,
+            roomCode: enteredRoomCode + " (" + activeExamKey + ")",
+            score: score,
+            correctCount: correctCount,
+            timeSpent: timeSpentStr
+          })
+        });
+      }
+    }
+
+    // Khởi tạo ngay lập tức khi tải xong
+    renderVocabCard(0);
+  </script>
+</body>
+</html>
