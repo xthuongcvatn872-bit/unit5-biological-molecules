@@ -1,5 +1,5 @@
 // Dán link Web App URL Google Script của thầy/cô vào đây:
-const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby_SAMPLE_CODE/exec";
+const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxIm9BTOfwv8uthaoKiOM7ujnVgtUqmEmVR1UOnVfEYUCCdwDxsw0zPGF8JBH7Ye5vgTQ/exec";
 
 // 23 Thuật ngữ Unit 5: Biological Molecules
 const VOCABULARY_DATA = [
