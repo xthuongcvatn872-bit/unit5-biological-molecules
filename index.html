@@ -307,7 +307,7 @@
     .quiz-opt-btn:hover { border-color: var(--primary); }
     .quiz-opt-btn.selected { border-color: var(--primary); background: #ecfdf5; color: var(--primary); }
 
-    /* CSS Giao diện Luyện tập từng câu mới */
+    /* CSS Giao diện Luyện tập */
     .question-slide-box {
       background: #f8fafc;
       border: 1.5px solid #e2e8f0;
@@ -369,8 +369,14 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      transition: all 0.2s;
     }
     .btn-hint:hover { background: #fde68a; }
+    .btn-hint.active {
+      background: #f59e0b;
+      color: white;
+      border-color: #d97706;
+    }
     .hint-content-box {
       background: #fffbeb;
       border: 1px solid #fde68a;
@@ -378,21 +384,21 @@
       padding: 12px 16px;
       color: #92400e;
       font-size: 0.9rem;
-      margin-top: 12px;
+      margin-top: 10px;
       width: 100%;
       text-align: left;
     }
     .ipa-badge-box {
       display: inline-block;
       background: #f1f5f9;
-      color: #475569;
-      padding: 4px 14px;
-      border-radius: 8px;
-      font-size: 1.05rem;
+      color: #334155;
+      padding: 6px 16px;
+      border-radius: 10px;
+      font-size: 1.15rem;
       font-weight: 700;
-      margin-top: 8px;
+      margin-top: 6px;
       letter-spacing: 0.5px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #cbd5e1;
     }
 
     /* Khung từ điền khuyết với ô chọn nằm ngay trong từ */
@@ -402,18 +408,18 @@
       justify-content: center;
       align-items: center;
       gap: 8px;
-      margin: 18px 0;
+      margin: 20px 0;
     }
     .char-block {
-      width: 44px;
-      height: 48px;
+      width: 46px;
+      height: 50px;
       background: white;
       border: 2px solid #cbd5e1;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: #0f172a;
       box-shadow: 0 2px 6px rgba(0,0,0,0.04);
@@ -425,12 +431,12 @@
       box-shadow: none;
     }
     .inline-select-box {
-      width: 52px;
-      height: 48px;
+      width: 54px;
+      height: 50px;
       border: 2.5px solid var(--primary);
       border-radius: 10px;
       background: #ecfdf5;
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: var(--primary);
       text-align: center;
@@ -468,12 +474,12 @@
         
         <div class="form-group" style="margin-top: 24px;">
           <label>Họ và tên học sinh:</label>
-          <input type="text" id="student-name" class="form-control" value="Nguyễn Minh Thư">
+          <input type="text" id="student-name" class="form-control" placeholder="Nguyễn Văn A">
         </div>
         
         <div class="form-group">
           <label>Lớp học:</label>
-          <input type="text" id="student-class" class="form-control" value="10A1">
+          <input type="text" id="student-class" class="form-control" placeholder="10A">
         </div>
         
         <button class="btn-nav-next" style="width: 100%; padding: 14px; font-size: 1.05rem; margin-top: 10px;" onclick="handleStartLearning()">
@@ -738,15 +744,15 @@
       ]
     };
 
-    var currentUser = { name: "Nguyễn Minh Thư", className: "10A1" };
+    var currentUser = { name: "", className: "" };
     var currentVocabIndex = 0;
 
-    // Biến cho Luyện tập nâng cấp
+    // Biến cho Luyện tập
     var customQuestions = [];
     var currentQuestionIdx = 0;
     var userCustomAnswers = {};
     var usedHintsCount = 0;
-    var hintStateMap = {}; // Lưu cấp độ gợi ý (0: chưa, 1: tiếng Anh, 2: tiếng Việt)
+    var hintStateMap = {}; // Lưu trạng thái gợi ý: { hint1: bool, hint2: bool }
 
     // Biến Đấu trường
     var activeExamKey = "";
@@ -766,11 +772,24 @@
       window.scrollTo(0, 0);
     }
 
+    // Xử lý thông tin học sinh (Tự động gán mã 4 số nếu để trống)
     function handleStartLearning() {
       var nameVal = document.getElementById("student-name").value.trim();
       var classVal = document.getElementById("student-class").value.trim();
-      currentUser.name = nameVal || "Nguyễn Minh Thư";
-      currentUser.className = classVal || "10A1";
+      
+      if (!nameVal) {
+        var randomCode = Math.floor(1000 + Math.random() * 9000);
+        currentUser.name = "Thí sinh tự do #" + randomCode;
+      } else {
+        currentUser.name = nameVal;
+      }
+
+      if (!classVal) {
+        currentUser.className = "TUDO";
+      } else {
+        currentUser.className = classVal;
+      }
+
       showScreen("screen-vocab");
       renderVocabCard(0);
     }
@@ -839,7 +858,7 @@
       }
     }
 
-    // ================= PHÂN HỆ LUYỆN TẬP TỔNG HỢP MỚI ================= //
+    // ================= PHÂN HỆ LUYỆN TẬP TỔNG HỢP ================= //
     function openReviewLobby() {
       showScreen("screen-review-setup");
     }
@@ -858,7 +877,7 @@
       currentQuestionIdx = 0;
 
       var pIdx = 0;
-      // 1. Sắp xếp chữ cái (Hiển thị phiên âm bên dưới + Gợi ý 2 nấc: Anh -> Việt)
+      // 1. Sắp xếp chữ cái
       for (var i = 0; i < numScramble; i++) {
         var item = pool[pIdx++];
         var cleanW = item.word.toUpperCase().replace(/\s+/g, '');
@@ -871,7 +890,7 @@
         });
       }
 
-      // 2. Điền khuyết 1 chữ cái (Nút gợi ý nằm ngay vị trí khuyết, chọn là hiện chữ)
+      // 2. Điền khuyết 1 chữ cái (Không có gợi ý nào)
       for (var j = 0; j < numFill; j++) {
         var fItem = pool[pIdx++];
         var chars = fItem.word.toUpperCase().split('');
@@ -882,7 +901,6 @@
         var blankPos = validPos[Math.floor(Math.random() * validPos.length)];
         var missingChar = chars[blankPos];
 
-        // Tạo 4 phương án cho dropdown
         var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         var optionsSet = [missingChar];
         while (optionsSet.length < 4) {
@@ -901,7 +919,7 @@
         });
       }
 
-      // 3. Trắc nghiệm định nghĩa tiếng Anh (Kèm nút gợi ý tiếng Việt)
+      // 3. Trắc nghiệm định nghĩa tiếng Anh
       for (var m = 0; m < numMcq; m++) {
         var mItem = pool[pIdx++];
         var wrongPool = VOCABULARY_DATA.filter(function(v) { return v.id !== mItem.id; })
@@ -916,7 +934,6 @@
         });
       }
 
-      // Xáo trộn ngẫu nhiên đề thi
       customQuestions.sort(function() { return Math.random() - 0.5; });
 
       renderReviewNavigationGrid();
@@ -950,7 +967,6 @@
       else if (q.type === "fill") badge.innerText = "✏️ Dạng 2: Điền khuyết 1 chữ cái";
       else badge.innerText = "🎯 Dạng 3: Chọn thuật ngữ đúng";
 
-      // Cập nhật trạng thái các nút lưới câu
       for (var i = 0; i < total; i++) {
         var stepBtn = document.getElementById("q-step-" + i);
         if (stepBtn) {
@@ -963,7 +979,6 @@
       var curBtn = document.getElementById("q-step-" + index);
       if (curBtn) curBtn.classList.add("current");
 
-      // Nút điều hướng
       document.getElementById("btn-review-prev-q").style.visibility = (index === 0) ? "hidden" : "visible";
       if (index === total - 1) {
         document.getElementById("btn-review-next-q").style.display = "none";
@@ -978,20 +993,30 @@
 
       // 1. Dạng Sắp xếp chữ cái
       if (q.type === "scramble") {
-        var html = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:8px;'>Sắp xếp các chữ cái sau thành từ vựng tiếng Anh đúng:</div>";
+        var html = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:8px;'>Sắp xếp các chữ cái sau thành từ vựng đúng:</div>";
         html += "<div class='scramble-badges'>";
         q.shuffledLetters.forEach(function(ch) {
           html += "<div class='letter-badge'>" + ch + "</div>";
         });
         html += "</div>";
 
-        // Phiên âm bên dưới chữ cái lộn xộn
-        html += "<div><span class='ipa-badge-box'>🔊 Phiên âm IPA: " + q.item.ipa + "</span></div>";
+        // Chỉ hiển thị phiên âm IPA, không hiển thị chữ chú thích "Phiên âm IPA:"
+        html += "<div><span class='ipa-badge-box'>" + q.item.ipa + "</span></div>";
 
-        // Nút gợi ý 2 nấc
-        html += "<div style='margin-top:14px;'>";
-        html += "<button class='btn-hint' onclick='handleScrambleHint(" + index + ")'>💡 Gợi ý (Bấm để xem định nghĩa)</button>";
-        html += "<div id='scramble-hint-box-" + index + "' class='hint-content-box' style='display:none;'></div>";
+        // Nút gợi ý 1 & gợi ý 2
+        var hState = hintStateMap[index] || { hint1: false, hint2: false };
+        html += "<div style='display:flex; justify-content:center; gap:10px; margin-top:14px;'>";
+        html += "<button class='btn-hint" + (hState.hint1 ? " active" : "") + "' onclick='toggleHint1(" + index + ")'>💡 Gợi ý 1</button>";
+        html += "<button class='btn-hint" + (hState.hint2 ? " active" : "") + "' onclick='toggleHint2(" + index + ")'>💡 Gợi ý 2</button>";
+        html += "</div>";
+
+        // Khung hiển thị nội dung gợi ý
+        html += "<div id='scramble-hint1-box-" + index + "' class='hint-content-box' style='display:" + (hState.hint1 ? "block" : "none") + ";'>";
+        html += "<b>Gợi ý 1 (Định nghĩa tiếng Anh):</b> <i>\"" + q.item.defEn + "\"</i>";
+        html += "</div>";
+
+        html += "<div id='scramble-hint2-box-" + index + "' class='hint-content-box' style='display:" + (hState.hint2 ? "block" : "none") + "; color:#065f46; background:#f0fdf4; border-color:#86efac;'>";
+        html += "<b>Gợi ý 2 (Định nghĩa tiếng Việt):</b> " + q.item.defVi;
         html += "</div>";
 
         // Ô nhập đánh máy
@@ -999,21 +1024,17 @@
         html += "<input type='text' id='scramble-input-q' class='input-word-field' style='width:100%; text-align:center; font-weight:700; font-size:1.15rem;' placeholder='Nhập đáp án đánh máy...' value='" + (userCustomAnswers[index] || "") + "' oninput='saveCustomAnswer(" + index + ", this.value.trim().toUpperCase())'>";
         html += "</div>";
         container.innerHTML = html;
-
-        // Giữ trạng thái gợi ý nếu đã bấm trước đó
-        restoreScrambleHintState(index);
       } 
 
-      // 2. Dạng Điền khuyết 1 chữ cái (Nút chọn nằm ngay vị trí chữ bị thiếu)
+      // 2. Dạng Điền khuyết 1 chữ cái (Hoàn toàn không có gợi ý nào)
       else if (q.type === "fill") {
-        var fHtml = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:12px;'>Chọn chữ cái còn thiếu trực tiếp tại ô chấm hỏi [ ? ] để hoàn thành từ:</div>";
+        var fHtml = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:12px;'>Chọn chữ cái còn thiếu tại ô [ ? ] để hoàn thành từ:</div>";
         
         fHtml += "<div class='inline-fill-word'>";
         var currentChosen = userCustomAnswers[index] || "";
 
         for (var c = 0; c < q.charsArray.length; c++) {
           if (c === q.blankPos) {
-            // Dropdown nằm ngay vị trí khuyết
             fHtml += "<select class='inline-select-box' onchange='handleInlineCharSelect(" + index + ", this.value)'>";
             fHtml += "<option value=''>?</option>";
             q.charOptions.forEach(function(optChar) {
@@ -1028,12 +1049,6 @@
           }
         }
         fHtml += "</div>";
-
-        // Hiển thị định nghĩa tiếng Anh bên dưới
-        fHtml += "<div style='font-size:0.95rem; color:#0369a1; background:#f0f9ff; border:1px solid #bae6fd; padding:10px 16px; border-radius:12px; margin-top:8px;'>";
-        fHtml += "<b>Định nghĩa:</b> <i>\"" + q.item.defEn + "\"</i>";
-        fHtml += "</div>";
-
         container.innerHTML = fHtml;
       } 
 
@@ -1053,55 +1068,49 @@
         mHtml += "</div></div>";
         container.innerHTML = mHtml;
 
-        if (hintStateMap[index]) {
+        if (hintStateMap[index] && hintStateMap[index].mcqHint) {
           var hBox = document.getElementById("mcq-hint-box-" + index);
           if (hBox) hBox.style.display = "block";
         }
       }
     }
 
-    // Xử lý gợi ý 2 nấc cho câu Sắp xếp chữ cái
-    function handleScrambleHint(idx) {
-      var state = hintStateMap[idx] || 0;
-      var q = customQuestions[idx];
-      var box = document.getElementById("scramble-hint-box-" + idx);
+    // Xử lý Gợi ý 1 (Định nghĩa tiếng Anh) cho câu Sắp xếp chữ
+    function toggleHint1(idx) {
+      if (!hintStateMap[idx]) hintStateMap[idx] = { hint1: false, hint2: false };
+      var box = document.getElementById("scramble-hint1-box-" + idx);
       if (!box) return;
 
-      if (state === 0) {
-        // Lần 1: Hiện định nghĩa tiếng Anh
-        hintStateMap[idx] = 1;
+      if (!hintStateMap[idx].hint1) {
+        hintStateMap[idx].hint1 = true;
         usedHintsCount++;
         box.style.display = "block";
-        box.innerHTML = "<b>💡 Gợi ý 1 (Định nghĩa tiếng Anh):</b> <i>\"" + q.item.defEn + "\"</i><br><small style='color:#b45309; display:block; margin-top:4px;'>(Bấm nút 'Gợi ý' lần nữa để xem nghĩa tiếng Việt)</small>";
-      } else if (state === 1) {
-        // Lần 2: Hiện thêm nghĩa tiếng Việt
-        hintStateMap[idx] = 2;
-        usedHintsCount++;
-        box.style.display = "block";
-        box.innerHTML = "<b>💡 Gợi ý 1 (Tiếng Anh):</b> <i>\"" + q.item.defEn + "\"</i><br>" +
-                        "<b style='color:#059669; display:block; margin-top:6px;'>💡 Gợi ý 2 (Tiếng Việt):</b> " + q.item.defVi;
+      } else {
+        hintStateMap[idx].hint1 = false;
+        box.style.display = "none";
       }
+      renderSingleReviewQuestion(idx);
     }
 
-    function restoreScrambleHintState(idx) {
-      var state = hintStateMap[idx] || 0;
-      var q = customQuestions[idx];
-      var box = document.getElementById("scramble-hint-box-" + idx);
+    // Xử lý Gợi ý 2 (Định nghĩa tiếng Việt) cho câu Sắp xếp chữ
+    function toggleHint2(idx) {
+      if (!hintStateMap[idx]) hintStateMap[idx] = { hint1: false, hint2: false };
+      var box = document.getElementById("scramble-hint2-box-" + idx);
       if (!box) return;
-      if (state === 1) {
+
+      if (!hintStateMap[idx].hint2) {
+        hintStateMap[idx].hint2 = true;
+        usedHintsCount++;
         box.style.display = "block";
-        box.innerHTML = "<b>💡 Gợi ý 1 (Định nghĩa tiếng Anh):</b> <i>\"" + q.item.defEn + "\"</i><br><small style='color:#b45309; display:block; margin-top:4px;'>(Bấm nút 'Gợi ý' lần nữa để xem nghĩa tiếng Việt)</small>";
-      } else if (state === 2) {
-        box.style.display = "block";
-        box.innerHTML = "<b>💡 Gợi ý 1 (Tiếng Anh):</b> <i>\"" + q.item.defEn + "\"</i><br>" +
-                        "<b style='color:#059669; display:block; margin-top:6px;'>💡 Gợi ý 2 (Tiếng Việt):</b> " + q.item.defVi;
+      } else {
+        hintStateMap[idx].hint2 = false;
+        box.style.display = "none";
       }
+      renderSingleReviewQuestion(idx);
     }
 
-    // Xử lý chọn chữ cái điền khuyết trực tiếp
     function handleInlineCharSelect(idx, charVal) {
       saveCustomAnswer(idx, charVal);
-      // Vẽ lại câu để chữ cái hiển thị rõ ràng tại chỗ
       renderSingleReviewQuestion(idx);
     }
 
@@ -1123,14 +1132,17 @@
     }
 
     function toggleMcqHint(idx) {
+      if (!hintStateMap[idx]) hintStateMap[idx] = {};
       var hBox = document.getElementById("mcq-hint-box-" + idx);
       if (!hBox) return;
+
       if (hBox.style.display === "block") {
         hBox.style.display = "none";
+        hintStateMap[idx].mcqHint = false;
       } else {
         hBox.style.display = "block";
-        if (!hintStateMap[idx]) {
-          hintStateMap[idx] = 1;
+        if (!hintStateMap[idx].mcqHint) {
+          hintStateMap[idx].mcqHint = true;
           usedHintsCount++;
         }
       }
@@ -1168,8 +1180,20 @@
     function openArenaLobby() {
       var nameVal = document.getElementById("student-name").value.trim();
       var classVal = document.getElementById("student-class").value.trim();
-      currentUser.name = nameVal || currentUser.name || "Nguyễn Minh Thư";
-      currentUser.className = classVal || currentUser.className || "10A1";
+      
+      if (!nameVal && !currentUser.name) {
+        var randomCode = Math.floor(1000 + Math.random() * 9000);
+        currentUser.name = "Thí sinh tự do #" + randomCode;
+      } else if (nameVal) {
+        currentUser.name = nameVal;
+      }
+
+      if (!classVal && !currentUser.className) {
+        currentUser.className = "TUDO";
+      } else if (classVal) {
+        currentUser.className = classVal;
+      }
+
       document.getElementById("arena-user-display").innerText = "Thí sinh: " + currentUser.name + " - Lớp: " + currentUser.className;
       showScreen("screen-arena-lobby");
     }
@@ -1273,7 +1297,7 @@
       }
     }
 
-    // Tự động khởi tạo từ đầu tiên
+    // Tự động khởi tạo từ vựng đầu tiên
     renderVocabCard(0);
   </script>
 </body>
