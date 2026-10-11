@@ -26,7 +26,7 @@ const VOCABULARY_DATA = [
  { id: 21, code: "021_Purine", word: "Purine", ipa: "/ˈpjʊəriːn/", defEn: "A double-ring nitrogenous base group.", defVi: "Nhóm base chứa nitrogen có cấu trúc hai vòng." },
   { id: 22, code: "022_Uric_acid", word: "Uric acid", ipa: "/ˌjʊərɪk ˈæsɪd/", defEn: "A waste product of purine breakdown.", defVi: "Sản phẩm bài tiết từ quá trình chuyển hóa purine." },
   { id: 23, code: "023_Gout", word: "Gout", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
-
+];
 const ARENA_CONFIG = { validCode: "195", durationMinutes: 10 };
 
 const ARENA_QUESTIONS = [
