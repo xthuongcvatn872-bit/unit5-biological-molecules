@@ -1,7 +1,7 @@
 // Dán link Web App URL Google Script của thầy/cô vào đây (nếu có):
 const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby_SAMPLE_CODE/exec";
 
-// 23 Thuật ngữ Unit 5: Biological Molecules - Chuẩn định dạng 001_...
+// 23 Thuật ngữ Unit 5: Khớp 100% với tên file gạch dưới trên GitHub
 const VOCABULARY_DATA = [
   { id: 1, code: "001_Ribonucleic_acid", word: "Ribonucleic acid", ipa: "/ˌraɪbəʊnjuːˌkliːɪk ˈæsɪd/", defEn: "A nucleic acid essential for protein synthesis.", defVi: "Nucleic acid cần cho quá trình tổng hợp protein." },
   { id: 2, code: "002_DNA", word: "DNA", ipa: "/ˌdiː.enˈeɪ/", defEn: "Molecule carrying genetic instructions for living organisms.", defVi: "Phân tử mang thông tin di truyền của sinh vật." },
@@ -23,9 +23,9 @@ const VOCABULARY_DATA = [
   { id: 18, code: "018_Gene", word: "Gene", ipa: "/dʒiːn/", defEn: "A DNA sequence encoding a functional product.", defVi: "Đoạn trình tự DNA mã hóa cho sản phẩm chức năng." },
   { id: 19, code: "019_Enzyme", word: "Enzyme", ipa: "/ˈenzaɪm/", defEn: "A biological catalyst accelerating chemical reactions.", defVi: "Chất xúc tác sinh học làm tăng tốc độ phản ứng." },
   { id: 20, code: "020_Ribozyme", word: "Ribozyme", ipa: "/ˈraɪbəzaɪm/", defEn: "An RNA molecule with catalytic activity.", defVi: "Phân tử RNA có hoạt tính xúc tác." },
-  { id: 21, code: "021_Purine", word: "Purine", ipa: "/ˈpjʊəriːn/", defEn: "A double-ring nitrogenous base group.", defVi: "Nhóm base chứa nitrogen có cấu trúc hai vòng." },
+  { id: 21, code: "021_Purin", word: "Purine", ipa: "/ˈpjʊəriːn/", defEn: "A double-ring nitrogenous base group.", defVi: "Nhóm base chứa nitrogen có cấu trúc hai vòng." },
   { id: 22, code: "022_Uric_acid", word: "Uric acid", ipa: "/ˌjʊərɪk ˈæsɪd/", defEn: "A waste product of purine breakdown.", defVi: "Sản phẩm bài tiết từ quá trình chuyển hóa purine." },
-  { id: 23, code: "023_Goute", word: "Goute", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
+  { id: 23, code: "023_Goute", word: "Gout", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
 ];
 
 const ARENA_CONFIG = { validCode: "195", durationMinutes: 10 };
@@ -85,10 +85,16 @@ function renderVocabCard(index) {
   const item = VOCABULARY_DATA[index];
   document.getElementById("vocab-counter").innerText = `Thuật ngữ ${index + 1} / ${VOCABULARY_DATA.length}`;
   
-  // Đã cấu hình sang định dạng ảnh .png và gọi cùng cấp thư mục
+  // Tải file trực tiếp: ảnh .png, audio .mp3, video .mp4 (dùng dấu gạch dưới)
   document.getElementById("vocab-img").src = `${item.code}.png`;
-  document.getElementById("vocab-audio").src = `${item.code}.mp3`;
-  document.getElementById("vocab-video").src = `${item.code}.mp4`;
+  
+  const audioElem = document.getElementById("vocab-audio");
+  audioElem.src = `${item.code}.mp3`;
+  audioElem.load();
+  
+  const videoElem = document.getElementById("vocab-video");
+  videoElem.src = `${item.code}.mp4`;
+  videoElem.load();
   
   document.getElementById("btn-prev-vocab").disabled = (index === 0);
   document.getElementById("btn-next-vocab").disabled = (index === VOCABULARY_DATA.length - 1);
