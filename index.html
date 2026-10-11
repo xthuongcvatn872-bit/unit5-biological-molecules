@@ -11,7 +11,7 @@
 </head>
 <body>
 
-  <!-- Thanh Header nổi bật -->
+  <!-- Thanh Header nổi bật, trang trọng -->
   <header class="app-header">
     <div class="header-container">
       <div>
@@ -40,7 +40,7 @@
         
         <div class="form-group">
           <label>Lớp học:</label>
-          <input type="text" id="student-class" class="form-control" placeholder="Ví dụ: 10A1">
+          <input type="text" id="student-class" class="form-control" placeholder="Ví dụ: 10A">
         </div>
         
         <button id="btn-start-app" class="btn btn-primary" style="width: 100%; margin-top: 10px; padding: 14px; font-size: 1.05rem;">
@@ -49,12 +49,12 @@
       </div>
     </section>
 
-    <!-- 2. Màn hình Học từ vựng (Trái: Ảnh + Game, Phải: Video) -->
+    <!-- 2. Màn hình Học từ vựng: Bố cục chữ nhật ngang chia đôi -->
     <section id="screen-vocab" class="screen-panel">
       <div class="card-box">
         
-        <!-- Thanh công cụ đầu trang từ vựng -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
+        <!-- Thanh công cụ trên cùng của thẻ từ -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:12px;">
           <span id="vocab-counter" style="font-weight:800; font-size:1.15rem; color:var(--primary);">Thuật ngữ 1 / 23</span>
           <div style="display:flex; gap:10px;">
             <button id="btn-play-audio" class="btn btn-secondary">🔊 Phát âm</button>
@@ -62,34 +62,36 @@
           </div>
         </div>
 
-        <!-- Bố cục 2 cột mới -->
-        <div class="vocab-layout-new">
+        <!-- Khung chia đôi: Trái (Ảnh + Game) | Phải (Video) -->
+        <div class="vocab-split-grid">
           
-          <!-- Cột bên trái: Ảnh trên + Game luyện tập dưới -->
-          <div class="left-column">
-            <div class="image-wrapper">
+          <!-- Cột bên trái: Ảnh trên + Câu luyện tập dưới -->
+          <div class="col-left">
+            <div class="vocab-image-box">
               <img id="vocab-img" src="" alt="Infographic thuật ngữ">
             </div>
 
-            <div class="game-container-sub">
-              <div class="game-title">🧩 Thử thách: Sắp xếp chữ cái</div>
-              <div class="game-sub">Nhấp vào các chữ cái theo thứ tự để ghép thành từ đúng:</div>
-              
-              <div class="scramble-box-sub">
-                <div id="target-slots" class="target-slots"></div>
-                <div id="letter-tiles" class="letter-tiles"></div>
-                <div id="scramble-feedback" style="min-height:22px; margin-top:8px; font-size:0.9rem;"></div>
+            <div class="scramble-practice-card">
+              <div>
+                <div class="practice-header">🧩 Thử thách: Sắp xếp chữ cái</div>
+                <div class="practice-subtitle">Nhấp vào các chữ cái theo thứ tự để ghép thành từ đúng:</div>
+                
+                <div class="scramble-inner-box">
+                  <div id="target-slots" class="target-slots"></div>
+                  <div id="letter-tiles" class="letter-tiles"></div>
+                </div>
               </div>
 
-              <div style="text-align:right;">
+              <div class="practice-footer">
+                <div id="scramble-feedback" style="font-weight:700; font-size:0.9rem;"></div>
                 <button id="btn-reset-scramble" class="btn btn-secondary" style="padding:6px 14px; font-size:0.85rem;">↺ Xếp lại chữ</button>
               </div>
             </div>
           </div>
 
-          <!-- Cột bên phải: Video dọc -->
-          <div class="right-column">
-            <div class="video-wrapper-right">
+          <!-- Cột bên phải: Video dọc chuẩn tỷ lệ -->
+          <div class="col-right">
+            <div class="video-frame">
               <video id="vocab-video" controls playsinline></video>
             </div>
             <audio id="vocab-audio" style="display:none;"></audio>
