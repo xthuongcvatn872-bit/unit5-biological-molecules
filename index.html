@@ -318,8 +318,8 @@
     <div class="header-container">
       <div class="school-badge">TRƯỜNG THPT CHU VĂN AN - THÁI NGUYÊN</div>
       <div class="header-right">
-        <div class="views-pill">👁️ Lượt tham gia: <span id="views-count">...</span></div>
-        <button id="btn-arena-header" class="btn-arena-nav">⚔️ Đấu trường Sinh học</button>
+        <div class="views-pill">👁️ Lượt tham gia: <span id="views-count">1</span></div>
+        <button id="btn-arena-header" class="btn-arena-nav" onclick="openArenaLobby()">⚔️ Đấu trường Sinh học</button>
       </div>
     </div>
   </header>
@@ -329,21 +329,21 @@
     <!-- 1. Màn hình Khai báo thông tin học sinh -->
     <section id="screen-welcome" class="screen-panel active">
       <div class="template-card" style="max-width: 480px; margin: 40px auto;">
-        <span class="unit-pill">Unit 5 - Biological molecules</span>
+        <span class="unit-pill">Unit 5 – Biological molecules</span>
         <h2 class="site-title">Biology Interactive Learning</h2>
         <p class="site-sub">Học liệu số & Kiểm tra đánh giá thuật ngữ Sinh học</p>
         
         <div class="form-group" style="margin-top: 24px;">
           <label>Họ và tên học sinh:</label>
-          <input type="text" id="student-name" class="form-control" placeholder="Ví dụ: Nguyễn Minh Thư">
+          <input type="text" id="student-name" class="form-control" placeholder="Ví dụ: Nguyễn Minh Thư" value="Nguyễn Minh Thư">
         </div>
         
         <div class="form-group">
           <label>Lớp học:</label>
-          <input type="text" id="student-class" class="form-control" placeholder="Ví dụ: 10A1">
+          <input type="text" id="student-class" class="form-control" placeholder="Ví dụ: 10A1" value="10A1">
         </div>
         
-        <button id="btn-start-app" class="btn-nav-next" style="width: 100%; padding: 14px; font-size: 1.05rem; margin-top: 10px;">
+        <button id="btn-start-app" class="btn-nav-next" style="width: 100%; padding: 14px; font-size: 1.05rem; margin-top: 10px;" onclick="handleStartLearning()">
           🚀 Bắt đầu học bài
         </button>
       </div>
@@ -354,7 +354,7 @@
       <div class="template-card">
         
         <div>
-          <span class="unit-pill">Unit 5 - Biological molecules</span>
+          <span class="unit-pill">Unit 5 – Biological molecules</span>
           <h1 class="site-title">Biology Interactive Learning</h1>
           <p class="site-sub">Học liệu số & Kiểm tra đánh giá thuật ngữ Sinh học</p>
           <div class="counter-pill" id="vocab-counter">1 / 23</div>
@@ -384,8 +384,8 @@
 
         <!-- Cặp nút Previous & Next -->
         <div class="nav-buttons-row">
-          <button id="btn-prev-vocab" class="btn-nav-prev">◄ Previous</button>
-          <button id="btn-next-vocab" class="btn-nav-next">Next ►</button>
+          <button id="btn-prev-vocab" class="btn-nav-prev" onclick="goToPrevVocab()">◄ Previous</button>
+          <button id="btn-next-vocab" class="btn-nav-next" onclick="goToNextVocab()">Next ►</button>
         </div>
 
         <!-- Khung nét đứt luyện nhớ từ -->
@@ -395,15 +395,15 @@
           <div id="scramble-badges-container" class="scramble-badges"></div>
           
           <div class="check-input-row">
-            <input type="text" id="input-check-word" class="input-word-field" placeholder="Gõ từ hoàn chỉnh...">
-            <button id="btn-check-word" class="btn-check-green">Kiểm tra</button>
+            <input type="text" id="input-check-word" class="input-word-field" placeholder="Gõ từ hoàn chỉnh..." onkeypress="if(event.key==='Enter') checkUserSpelling();">
+            <button id="btn-check-word" class="btn-check-green" onclick="checkUserSpelling()">Kiểm tra</button>
           </div>
           <div id="check-feedback" style="min-height: 24px; margin-top: 10px; font-weight: 700;"></div>
         </div>
 
         <!-- Nút cam dẫn tới bài kiểm tra 20 câu -->
         <div>
-          <button id="btn-open-review" class="btn-orange-quiz">
+          <button id="btn-open-review" class="btn-orange-quiz" onclick="generateReviewQuiz()">
             🚀 Đi đến Bài kiểm tra tổng hợp Unit 5 (20 câu)
           </button>
         </div>
@@ -424,29 +424,28 @@
         </div>
         <div id="review-questions-list"></div>
         <div style="text-align:center; margin-top:30px;">
-          <button id="btn-submit-review" class="btn-nav-next" style="padding:14px 40px; font-size:1.05rem;">
+          <button id="btn-submit-review" class="btn-nav-next" style="padding:14px 40px; font-size:1.05rem;" onclick="submitReviewQuiz()">
             ✅ Nộp bài tập tổng hợp
           </button>
         </div>
       </div>
     </section>
 
-    <!-- 4. Cổng Đấu trường (Mã vào: 10A1, 10A2, hoặc TUDO - Không hiện mờ) -->
+    <!-- 4. Cổng Đấu trường (Mã vào: 10A1, 10A2, hoặc TUDO) -->
     <section id="screen-arena-lobby" class="screen-panel">
       <div class="template-card" style="max-width: 540px; margin: 30px auto;">
         <h2 style="color:var(--accent); font-size:1.5rem;">⚔️ CỔNG ĐẤU TRƯỜNG SINH HỌC</h2>
         <p id="arena-user-display" style="font-weight:700; margin:12px 0; color:var(--text-muted);"></p>
         <p style="font-size:0.95rem; line-height:1.5;">
-          Đề thi gồm <b>10 câu hỏi</b> trích xuất ngẫu nhiên từ ngân hàng đề (5 câu trắc nghiệm, 3 câu Đúng/Sai, 2 câu điền số liệu). Thời gian làm bài: <b>10 phút</b>.
+          Đề thi gồm <b>10 câu hỏi</b> (5 câu trắc nghiệm, 3 câu Đúng/Sai, 2 câu điền số liệu). Thời gian làm bài: <b>10 phút</b>.
         </p>
 
         <div style="margin:24px 0;">
           <label style="font-weight:700; display:block; margin-bottom:8px;">Nhập Mã Thi Đấu (Do Giáo viên cấp):</label>
-          <!-- Đã xóa placeholder mờ, chấp nhận 10A1, 10A2, TUDO -->
-          <input type="text" id="arena-code-input" class="form-control" style="font-size:1.5rem; letter-spacing:4px; text-align:center; max-width:240px; margin:0 auto; text-transform:uppercase;">
+          <input type="text" id="arena-code-input" class="form-control" style="font-size:1.5rem; letter-spacing:4px; text-align:center; max-width:240px; margin:0 auto; text-transform:uppercase;" onkeypress="if(event.key==='Enter') startArenaContest();">
         </div>
 
-        <button id="btn-arena-enter" class="btn-orange-quiz" style="width:100%; padding:14px;">
+        <button id="btn-arena-enter" class="btn-orange-quiz" style="width:100%; padding:14px;" onclick="startArenaContest()">
           🚪 Vào phòng thi đấu
         </button>
       </div>
@@ -464,7 +463,7 @@
         </div>
         <div id="arena-questions-container"></div>
         <div style="text-align:center; margin-top:30px;">
-          <button id="btn-submit-arena" class="btn-orange-quiz" style="padding:14px 40px;">
+          <button id="btn-submit-arena" class="btn-orange-quiz" style="padding:14px 40px;" onclick="if(confirm('Xác nhận nộp bài Đấu trường?')) submitArena();">
             🏁 Nộp bài Đấu trường
           </button>
         </div>
@@ -488,9 +487,10 @@
   </main>
 
   <script>
+    // Dán link Web App URL Google Script của thầy/cô vào đây (nếu có):
     const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby_SAMPLE_CODE/exec";
 
-    // 23 Thuật ngữ Unit 5
+    // 23 Thuật ngữ Unit 5: Biological Molecules
     const VOCABULARY_DATA = [
       { id: 1, code: "001_Ribonucleic_acid", word: "Ribonucleic acid", ipa: "/ˌraɪbəʊnjuːˌkliːɪk ˈæsɪd/", defEn: "A nucleic acid essential for protein synthesis.", defVi: "Nucleic acid cần cho quá trình tổng hợp protein." },
       { id: 2, code: "002_DNA", word: "DNA", ipa: "/ˌdiː.enˈeɪ/", defEn: "Molecule carrying genetic instructions for living organisms.", defVi: "Phân tử mang thông tin di truyền của sinh vật." },
@@ -517,257 +517,13 @@
       { id: 23, code: "023_Gout", word: "Gout", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
     ];
 
-    // Cấu hình mã phòng hợp lệ (chấp nhận 10A1, 10A2, TUDO)
     const VALID_CODES = ["10A1", "10A2", "TUDO"];
     const ARENA_DURATION_MINUTES = 10;
 
-    // Ngân hàng 3 Bộ đề trích xuất từ file Excel "Bộ đề ktra cuối giờ.xlsx"
     const ARENA_EXAMS = {
       "Bộ đề 1": [
         { id: 1, type: "mcq", question: "Mỗi nucleotide của RNA chứa loại đường 5 - carbon nào?", options: ["Deoxyribose", "Ribose", "Glucose", "Fructose"], answer: "Ribose" },
         { id: 2, type: "mcq", question: "Phân tử RNA nào làm khuôn để tổng hợp protein ở ribosome?", options: ["mRNA", "tRNA", "rRNA", "Ribozyme"], answer: "mRNA" },
         { id: 3, type: "mcq", question: "Base nào sau đây tham gia cấu tạo RNA nhưng không có ở DNA?", options: ["Adenine", "Uracil", "Guanine", "Cytosine"], answer: "Uracil" },
         { id: 4, type: "mcq", question: "Ở tRNA, các vùng tự bắt đôi liên kết với nhau bằng loại liên kết nào?", options: ["Peptide", "Glycosidic", "Hydrogen", "Phosphodiester"], answer: "Hydrogen" },
-        { id: 5, type: "mcq", question: "So với DNA, RNA có đặc điểm cấu trúc nào sau đây?", options: ["Luôn có 2 chuỗi xoắn kép", "Chứa đường deoxyribose", "Chủ yếu gồm 1 chuỗi polynucleotide", "Chứa base Thymine"], answer: "Chủ yếu gồm 1 chuỗi polynucleotide" },
-        { id: 6, type: "tf", question: "Nhận định: mRNA chỉ gồm một chuỗi polynucleotide dạng mạch thẳng.", answer: "Đúng" },
-        { id: 7, type: "tf", question: "Nhận định: Ribozyme là phân tử RNA có khả năng xúc tác hóa học như enzyme.", answer: "Đúng" },
-        { id: 8, type: "tf", question: "Nhận định: Giống như DNA, trong phân tử RNA số lượng nucleotide A luôn bằng U.", answer: "Sai" },
-        { id: 9, type: "num", question: "Mỗi nucleotide cấu tạo nên RNA được tạo thành từ bao nhiêu thành phần hóa học?", answer: "3" },
-        { id: 10, type: "num", question: "Giữa một cặp base liên kết bổ sung Guanine (G) và Cytosine (C) trên phân tử tRNA có bao nhiêu liên kết hydrogen?", answer: "3" }
-      ],
-      "Bộ đề 2": [
-        { id: 1, type: "mcq", question: "Phân tử RNA nào tham gia cấu tạo nên bào quan ribosome?", options: ["mRNA", "tRNA", "rRNA", "Ribozyme"], answer: "rRNA" },
-        { id: 2, type: "mcq", question: "Phân tử RNA làm nhiệm vụ vận chuyển amino acid đến ribosome là?", options: ["tRNA", "mRNA", "rRNA", "RNA nhỏ"], answer: "tRNA" },
-        { id: 3, type: "mcq", question: "Vị trí trên tRNA khớp bổ sung với mã sao trên mRNA gọi là gì?", options: ["Vị trí gắn amino acid", "Bộ ba đối mã", "Bộ khung đường", "Gốc phosphate"], answer: "Bộ ba đối mã" },
-        { id: 4, type: "mcq", question: "Cấu trúc phân tử DNA khác với RNA ở đặc điểm nào sau đây?", options: ["Cấu tạo theo nguyên tắc đa phân", "Gồm hai chuỗi polynucleotide", "Đơn phân có gốc phosphate", "Có chứa base Adenine"], answer: "Gồm hai chuỗi polynucleotide" },
-        { id: 5, type: "mcq", question: "Các phân tử RNA nhỏ trong tế bào đảm nhận chức năng nào?", options: ["Làm khuôn dịch mã", "Vận chuyển amino acid", "Cấu tạo ribosome", "Điều hoà hoạt động gene"], answer: "Điều hoà hoạt động gene" },
-        { id: 6, type: "tf", question: "Nhận định: Đa số các loại phân tử RNA được cấu tạo từ hai chuỗi xoắn kép.", answer: "Sai" },
-        { id: 7, type: "tf", question: "Nhận định: Trên phân tử tRNA có vị trí đặc hiệu để gắn kết với amino acid.", answer: "Đúng" },
-        { id: 8, type: "tf", question: "Nhận định: Trong tế bào sống, mọi phân tử có chức năng xúc tác đều là protein.", answer: "Sai" },
-        { id: 9, type: "num", question: "Có bao nhiêu loại nitrogenous base chính tham gia cấu tạo nên phân tử RNA?", answer: "4" },
-        { id: 10, type: "num", question: "Giữa một cặp base liên kết bổ sung Adenine (A) và Uracil (U) trên phân tử tRNA có bao nhiêu liên kết hydrogen?", answer: "2" }
-      ],
-      "Bộ đề 3": [
-        { id: 1, type: "mcq", question: "Đơn phân của RNA không có loại nitrogenous base nào sau đây?", options: ["Adenine", "Uracil", "Guanine", "Thymine"], answer: "Thymine" },
-        { id: 2, type: "mcq", question: "Loại mô động vật nào chứa rất nhiều DNA thường dùng để tách chiết?", options: ["Mô gan", "Mô mỡ", "Mô xương", "Biểu bì"], answer: "Mô gan" },
-        { id: 3, type: "mcq", question: "Yếu tố nào giúp tRNA có cấu trúc không gian 3 chiều đặc trưng?", options: ["Mạch thẳng dài", "Các vùng tự bắt đôi bổ sung", "Chứa đường glucose", "Có cấu trúc 2 mạch"], answer: "Các vùng tự bắt đôi bổ sung" },
-        { id: 4, type: "mcq", question: "Điểm khác biệt về loại đường giữa phân tử DNA và RNA là?", options: ["DNA chứa deoxyribose, RNA chứa ribose", "DNA chứa ribose, RNA chứa deoxyribose", "DNA chứa glucose, RNA chứa ribose", "DNA chứa fructose, RNA chứa glucose"], answer: "DNA chứa deoxyribose, RNA chứa ribose" },
-        { id: 5, type: "mcq", question: "Khi bị rối loạn chuyển hoá, ăn nhiều thức ăn giàu nucleic acid dễ gây bệnh gì?", options: ["Bướu cổ", "Tiểu đường", "Bệnh gút (goute)", "Béo phì"], answer: "Bệnh gút (goute)" },
-        { id: 6, type: "tf", question: "Nhận định: Tất cả các loại phân tử RNA trong tế bào đều chỉ có dạng mạch thẳng.", answer: "Sai" },
-        { id: 7, type: "tf", question: "Nhận định: Ở tRNA, các vùng tự bắt đôi liên kết theo kiểu A – U và G – C.", answer: "Đúng" },
-        { id: 8, type: "tf", question: "Nhận định: So với protein, phân tử DNA đảm nhận nhiều loại chức năng hơn.", answer: "Sai" },
-        { id: 9, type: "num", question: "Đường ribose trong đơn phân nucleotide của RNA có bao nhiêu nguyên tử carbon?", answer: "5" },
-        { id: 10, type: "num", question: "Phân tử DNA thường gồm 2 chuỗi polynucleotide, vậy RNA thông thường được cấu tạo từ bao nhiêu chuỗi polynucleotide?", answer: "1" }
-      ]
-    };
-
-    let currentUser = { name: "", className: "" };
-    let currentVocabIndex = 0;
-    let reviewQuestions = [];
-    let reviewAnswers = {};
-    
-    // Biến cho Đấu trường
-    let activeExamKey = "";
-    let activeQuestions = [];
-    let arenaUserAnswers = {};
-    let arenaTimerInterval = null;
-    let arenaTimeRemaining = ARENA_DURATION_MINUTES * 60;
-    let enteredRoomCode = "";
-
-    document.addEventListener("DOMContentLoaded", () => {
-      fetchVisitorCount();
-      setupEventListeners();
-      renderVocabCard(0);
-    });
-
-    function showScreen(screenId) {
-      document.querySelectorAll(".screen-panel").forEach(p => p.classList.remove("active"));
-      const target = document.getElementById(screenId);
-      if (target) target.classList.add("active");
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function fetchVisitorCount() {
-      if (GOOGLE_SHEET_API_URL.includes("SAMPLE_CODE")) {
-        document.getElementById("views-count").innerText = "1";
-        return;
-      }
-      fetch(GOOGLE_SHEET_API_URL)
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.views) document.getElementById("views-count").innerText = data.views;
-        })
-        .catch(() => {
-          document.getElementById("views-count").innerText = "---";
-        });
-    }
-
-    function renderVocabCard(index) {
-      currentVocabIndex = index;
-      const item = VOCABULARY_DATA[index];
-      document.getElementById("vocab-counter").innerText = `${index + 1} / ${VOCABULARY_DATA.length}`;
-      
-      document.getElementById("vocab-img").src = `${item.code}.png`;
-      
-      const audioElem = document.getElementById("vocab-audio");
-      audioElem.src = `${item.code}.mp3`;
-      audioElem.load();
-      
-      const videoElem = document.getElementById("vocab-video");
-      videoElem.src = `${item.code}.mp4`;
-      videoElem.load();
-      
-      document.getElementById("btn-prev-vocab").disabled = (index === 0);
-      document.getElementById("btn-prev-vocab").style.opacity = (index === 0) ? "0.4" : "1";
-      
-      document.getElementById("btn-next-vocab").disabled = (index === VOCABULARY_DATA.length - 1);
-      document.getElementById("btn-next-vocab").style.opacity = (index === VOCABULARY_DATA.length - 1) ? "0.4" : "1";
-
-      renderScrambleBadges(item.word);
-    }
-
-    function renderScrambleBadges(rawWord) {
-      const cleanWord = rawWord.toUpperCase().replace(/\s+/g, '');
-      const shuffled = cleanWord.split('').sort(() => Math.random() - 0.5);
-      
-      const container = document.getElementById("scramble-badges-container");
-      container.innerHTML = "";
-      
-      shuffled.forEach(char => {
-        const badge = document.createElement("div");
-        badge.className = "letter-badge";
-        badge.innerText = char;
-        container.appendChild(badge);
-      });
-      
-      document.getElementById("input-check-word").value = "";
-      document.getElementById("check-feedback").innerHTML = "";
-    }
-
-    function checkUserSpelling() {
-      const inputVal = document.getElementById("input-check-word").value.trim().toUpperCase().replace(/\s+/g, '');
-      const correctVal = VOCABULARY_DATA[currentVocabIndex].word.toUpperCase().replace(/\s+/g, '');
-      const feedback = document.getElementById("check-feedback");
-      
-      if (!inputVal) {
-        feedback.innerHTML = "<span style='color:#ef4444;'>Vui lòng gõ từ hoàn chỉnh vào ô trên!</span>";
-        return;
-      }
-      
-      if (inputVal === correctVal) {
-        feedback.innerHTML = "<span style='color:#059669;'>🎉 Chính xác! Em đã nhớ đúng từ vựng này.</span>";
-      } else {
-        feedback.innerHTML = "<span style='color:#ef4444;'>❌ Chưa chính xác, hãy thử lại nhé!</span>";
-      }
-    }
-
-    function generateReviewQuiz() {
-      const shuffledVocab = [...VOCABULARY_DATA].sort(() => Math.random() - 0.5);
-      const selected20 = shuffledVocab.slice(0, 20);
-      reviewQuestions = [];
-      reviewAnswers = {};
-      
-      for (let i = 0; i < 10; i++) reviewQuestions.push({ type: 'scramble', item: selected20[i] });
-      for (let i = 10; i < 15; i++) reviewQuestions.push({ type: 'fill', item: selected20[i] });
-      for (let i = 15; i < 20; i++) {
-        const correct = selected20[i];
-        const wrongOptions = VOCABULARY_DATA.filter(v => v.id !== correct.id).sort(() => Math.random() - 0.5).slice(0, 3);
-        const options = [correct, ...wrongOptions].sort(() => Math.random() - 0.5);
-        reviewQuestions.push({ type: 'mcq_def', item: correct, options: options });
-      }
-      
-      renderReviewQuizUI();
-      showScreen("screen-review-quiz");
-    }
-
-    function renderReviewQuizUI() {
-      const container = document.getElementById("review-questions-list");
-      container.innerHTML = "";
-      
-      reviewQuestions.forEach((q, idx) => {
-        const box = document.createElement("div");
-        box.style.background = "#f8fafc";
-        box.style.border = "1.5px solid #e2e8f0";
-        box.style.borderRadius = "16px";
-        box.style.padding = "18px";
-        box.style.marginBottom = "18px";
-        
-        let html = `<h4>Câu ${idx + 1}: `;
-        if (q.type === 'scramble') {
-          const cleanWord = q.item.word.toUpperCase().replace(/\s+/g, '');
-          const letters = cleanWord.split('').sort(() => Math.random() - 0.5).join(" - ");
-          html += `Sắp xếp chữ cái: <span style="color:var(--primary); font-size:1.1rem; letter-spacing:2px;">[ ${letters} ]</span></h4>`;
-          html += `<p style="font-size:0.9rem; color:#64748b; margin:6px 0;">Gợi ý: ${q.item.defVi}</p>`;
-          html += `<input type="text" class="form-control" placeholder="Nhập từ..." onchange="reviewAnswers[${idx}] = this.value.trim().toUpperCase()">`;
-        } else if (q.type === 'fill') {
-          const cleanWord = q.item.word.toUpperCase();
-          let masked = cleanWord.length > 4 ? cleanWord[0] + " _ " + cleanWord.slice(2, -1) + " _ " : cleanWord[0] + " _ " + cleanWord.slice(2);
-          html += `Điền từ còn thiếu: <b style="letter-spacing:2px; color:var(--secondary); font-size:1.1rem;">${masked}</b></h4>`;
-          html += `<p style="font-size:0.9rem; color:#64748b; margin:6px 0;">Định nghĩa: ${q.item.defEn}</p>`;
-          html += `<input type="text" class="form-control" placeholder="Nhập từ..." onchange="reviewAnswers[${idx}] = this.value.trim().toUpperCase()">`;
-        } else if (q.type === 'mcq_def') {
-          html += `Chọn thuật ngữ đúng với định nghĩa:</h4>`;
-          html += `<p style="margin:8px 0; font-weight:600; color:#0284c7;">"${q.item.defEn}"</p>`;
-          html += `<div class="quiz-options">`;
-          q.options.forEach(opt => {
-            html += `<button class="quiz-opt-btn" onclick="reviewAnswers[${idx}] = '${opt.word}'; this.parentElement.querySelectorAll('.quiz-opt-btn').forEach(b=>b.classList.remove('selected')); this.classList.add('selected');">${opt.word}</button>`;
-          });
-          html += `</div>`;
-        }
-        
-        box.innerHTML = html;
-        container.appendChild(box);
-      });
-    }
-
-    function submitReviewQuiz() {
-      let score = 0;
-      reviewQuestions.forEach((q, idx) => {
-        const userAns = (reviewAnswers[idx] || "").replace(/\s+/g, '');
-        const correctAns = q.item.word.toUpperCase().replace(/\s+/g, '');
-        if (userAns === correctAns) score++;
-      });
-      alert(`Kết quả bài tập tổng hợp: Đúng ${score} / 20 câu.`);
-      showScreen("screen-vocab");
-    }
-
-    // Logic Đấu trường Sinh học mới
-    function startArenaContest() {
-      const code = document.getElementById("arena-code-input").value.trim().toUpperCase();
-      
-      // Kiểm tra 1 trong 3 mã hợp lệ: 10A1, 10A2, TUDO
-      if (!VALID_CODES.includes(code)) {
-        alert("⚠️ Mã phòng thi không đúng! Vui lòng nhập đúng mã lớp của bạn (10A1, 10A2 hoặc TUDO).");
-        return;
-      }
-      
-      enteredRoomCode = code;
-      
-      // Chọn ngẫu nhiên 1 trong 3 Bộ đề
-      const examKeys = Object.keys(ARENA_EXAMS);
-      activeExamKey = examKeys[Math.floor(Math.random() * examKeys.length)];
-      activeQuestions = ARENA_EXAMS[activeExamKey];
-      
-      document.getElementById("arena-exam-name").innerText = `(${activeExamKey})`;
-      
-      arenaUserAnswers = {};
-      arenaTimeRemaining = ARENA_DURATION_MINUTES * 60;
-      startArenaTimer();
-      renderArenaQuestions();
-      showScreen("screen-arena-board");
-    }
-
-    function startArenaTimer() {
-      clearInterval(arenaTimerInterval);
-      arenaTimerInterval = setInterval(() => {
-        arenaTimeRemaining--;
-        const mins = Math.floor(arenaTimeRemaining / 60);
-        const secs = arenaTimeRemaining % 60;
-        document.getElementById("arena-timer").innerText = `⏱️ ${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        
-        if (arenaTimeRemaining <= 0) {
-          clearInterval(arenaTimerInterval);
-          alert("Hết giờ thi! Tự động nộp bài.");
-          submitArena();
-        }
-      },
+        { id: 5, type: "mcq", question: "So với DNA
