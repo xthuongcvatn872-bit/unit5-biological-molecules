@@ -1,31 +1,31 @@
 // Dán link Web App URL Google Script của thầy/cô vào đây:
-const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxIm9BTOfwv8uthaoKiOM7ujnVgtUqmEmVR1UOnVfEYUCCdwDxsw0zPGF8JBH7Ye5vgTQ/exec";
+const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby_SAMPLE_CODE/exec";
 
-// Dữ liệu 23 thuật ngữ Unit 5 - Khớp chính xác tên file có khoảng trắng
+// 23 Thuật ngữ Unit 5: Biological Molecules
 const VOCABULARY_DATA = [
-  { id: 1, code: "001 Ribonucleic acid", word: "Ribonucleic acid", ipa: "/ˌraɪbəʊnjuːˌkliːɪk ˈæsɪd/", defEn: "A nucleic acid essential for protein synthesis.", defVi: "Nucleic acid cần cho quá trình tổng hợp protein." },
-  { id: 2, code: "002 DNA", word: "DNA", ipa: "/ˌdiː.enˈeɪ/", defEn: "Molecule carrying genetic instructions for living organisms.", defVi: "Phân tử mang thông tin di truyền của sinh vật." },
-  { id: 3, code: "003 RNA", word: "RNA", ipa: "/ˌɑː.enˈeɪ/", defEn: "Single-stranded nucleic acid involved in protein synthesis.", defVi: "Nucleic acid mạch đơn tham gia tổng hợp protein." },
-  { id: 4, code: "004 Polynucleotide", word: "Polynucleotide", ipa: "/ˌpɒlinjuːkliətaɪd/", defEn: "A chain of linked nucleotide units.", defVi: "Chuỗi gồm nhiều nucleotide liên kết với nhau." },
-  { id: 5, code: "005 Nitrogenous base", word: "Nitrogenous base", ipa: "/naɪˈtrɒdʒɪnəs beɪs/", defEn: "A nitrogen-containing building block of nucleic acids.", defVi: "Base chứa nitrogen cấu tạo nên nucleic acid." },
-  { id: 6, code: "006 Ribose", word: "Ribose", ipa: "/ˈraɪbəʊs/", defEn: "A five-carbon sugar found in RNA.", defVi: "Loại đường 5 carbon cấu tạo nên RNA." },
-  { id: 7, code: "007 Carbon", word: "Carbon", ipa: "/ˈkɑːbən/", defEn: "The primary element forming organic molecules.", defVi: "Nguyên tố chính tạo nên các phân tử hữu cơ." },
-  { id: 8, code: "008 Phosphate", word: "Phosphate", ipa: "/ˈfɒsfeɪt/", defEn: "Chemical group forming the nucleic acid backbone.", defVi: "Nhóm hóa học tạo nên khung của nucleic acid." },
-  { id: 9, code: "009 Adenine", word: "Adenine", ipa: "/ˈædəniːn/", defEn: "Purine base pairing with thymine or uracil.", defVi: "Base nhóm purine bắt cặp với thymine hoặc uracil." },
-  { id: 10, code: "010 Guanine", word: "Guanine", ipa: "/ˈɡwɑːniːn/", defEn: "Purine base pairing with cytosine.", defVi: "Base nhóm purine bắt cặp với cytosine." },
-  { id: 11, code: "011 Cytosine", word: "Cytosine", ipa: "/ˈsaɪtəsiːn/", defEn: "Pyrimidine base pairing with guanine.", defVi: "Base nhóm pyrimidine bắt cặp với guanine." },
-  { id: 12, code: "012 Uracil", word: "Uracil", ipa: "/ˈjʊərəsɪl/", defEn: "Pyrimidine base unique to RNA.", defVi: "Base nhóm pyrimidine chỉ có trong RNA." },
-  { id: 13, code: "013 Thymine", word: "Thymine", ipa: "/ˈθaɪmiːn/", defEn: "Pyrimidine base unique to DNA.", defVi: "Base nhóm pyrimidine chỉ có trong DNA." },
-  { id: 14, code: "014 Hydrogen", word: "Hydrogen", ipa: "/ˈhaɪdrədʒən/", defEn: "Chemical element forming stabilizing bonds in biomolecules.", defVi: "Nguyên tố tạo liên kết làm bền phân tử sinh học." },
-  { id: 15, code: "015 Ribosome", word: "Ribosome", ipa: "/ˈraɪbəsəʊm/", defEn: "Cellular structure that synthesizes proteins.", defVi: "Cấu trúc tế bào thực hiện tổng hợp protein." },
-  { id: 16, code: "016 Amino acid", word: "Amino acid", ipa: "/əˌmiːnəʊ ˈæsɪd/", defEn: "A monomer building block of proteins.", defVi: "Đơn phân cấu tạo nên chuỗi protein." },
-  { id: 17, code: "017 Protein", word: "Protein", ipa: "/ˈprəʊtiːn/", defEn: "A macromolecule composed of amino acids.", defVi: "Đại phân tử sinh học cấu tạo từ các amino acid." },
-  { id: 18, code: "018 Gene", word: "Gene", ipa: "/dʒiːn/", defEn: "A DNA sequence encoding a functional product.", defVi: "Đoạn trình tự DNA mã hóa cho sản phẩm chức năng." },
-  { id: 19, code: "019 Enzyme", word: "Enzyme", ipa: "/ˈenzaɪm/", defEn: "A biological catalyst accelerating chemical reactions.", defVi: "Chất xúc tác sinh học làm tăng tốc độ phản ứng." },
-  { id: 20, code: "020 Ribozyme", word: "Ribozyme", ipa: "/ˈraɪbəzaɪm/", defEn: "An RNA molecule with catalytic activity.", defVi: "Phân tử RNA có hoạt tính xúc tác." },
-  { id: 21, code: "021 Purin", word: "Purine", ipa: "/ˈpjʊəriːn/", defEn: "A double-ring nitrogenous base group.", defVi: "Nhóm base chứa nitrogen có cấu trúc hai vòng." },
-  { id: 22, code: "022 Uric acid", word: "Uric acid", ipa: "/ˌjʊərɪk ˈæsɪd/", defEn: "A waste product of purine breakdown.", defVi: "Sản phẩm bài tiết từ quá trình chuyển hóa purine." },
-  { id: 23, code: "023 Goute", word: "Gout", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
+  { id: 1, code: "001_Ribonucleic_acid", word: "Ribonucleic acid", ipa: "/ˌraɪbəʊnjuːˌkliːɪk ˈæsɪd/", defEn: "A nucleic acid essential for protein synthesis.", defVi: "Nucleic acid cần cho quá trình tổng hợp protein." },
+  { id: 2, code: "002_DNA", word: "DNA", ipa: "/ˌdiː.enˈeɪ/", defEn: "Molecule carrying genetic instructions for living organisms.", defVi: "Phân tử mang thông tin di truyền của sinh vật." },
+  { id: 3, code: "003_RNA", word: "RNA", ipa: "/ˌɑː.enˈeɪ/", defEn: "Single-stranded nucleic acid involved in protein synthesis.", defVi: "Nucleic acid mạch đơn tham gia tổng hợp protein." },
+  { id: 4, code: "004_Polynucleotide", word: "Polynucleotide", ipa: "/ˌpɒlinjuːkliətaɪd/", defEn: "A chain of linked nucleotide units.", defVi: "Chuỗi gồm nhiều nucleotide liên kết với nhau." },
+  { id: 5, code: "005_Nitrogenous_base", word: "Nitrogenous base", ipa: "/naɪˈtrɒdʒɪnəs beɪs/", defEn: "A nitrogen-containing building block of nucleic acids.", defVi: "Base chứa nitrogen cấu tạo nên nucleic acid." },
+  { id: 6, code: "006_Ribose", word: "Ribose", ipa: "/ˈraɪbəʊs/", defEn: "A five-carbon sugar found in RNA.", defVi: "Loại đường 5 carbon cấu tạo nên RNA." },
+  { id: 7, code: "007_Carbon", word: "Carbon", ipa: "/ˈkɑːbən/", defEn: "The primary element forming organic molecules.", defVi: "Nguyên tố chính tạo nên các phân tử hữu cơ." },
+  { id: 8, code: "008_Phosphate", word: "Phosphate", ipa: "/ˈfɒsfeɪt/", defEn: "Chemical group forming the nucleic acid backbone.", defVi: "Nhóm hóa học tạo nên khung của nucleic acid." },
+  { id: 9, code: "009_Adenine", word: "Adenine", ipa: "/ˈædəniːn/", defEn: "Purine base pairing with thymine or uracil.", defVi: "Base nhóm purine bắt cặp với thymine hoặc uracil." },
+  { id: 10, code: "010_Guanine", word: "Guanine", ipa: "/ˈɡwɑːniːn/", defEn: "Purine base pairing with cytosine.", defVi: "Base nhóm purine bắt cặp với cytosine." },
+  { id: 11, code: "011_Cytosine", word: "Cytosine", ipa: "/ˈsaɪtəsiːn/", defEn: "Pyrimidine base pairing with guanine.", defVi: "Base nhóm pyrimidine bắt cặp với guanine." },
+  { id: 12, code: "012_Uracil", word: "Uracil", ipa: "/ˈjʊərəsɪl/", defEn: "Pyrimidine base unique to RNA.", defVi: "Base nhóm pyrimidine chỉ có trong RNA." },
+  { id: 13, code: "013_Thymine", word: "Thymine", ipa: "/ˈθaɪmiːn/", defEn: "Pyrimidine base unique to DNA.", defVi: "Base nhóm pyrimidine chỉ có trong DNA." },
+  { id: 14, code: "014_Hydrogen", word: "Hydrogen", ipa: "/ˈhaɪdrədʒən/", defEn: "Chemical element forming stabilizing bonds in biomolecules.", defVi: "Nguyên tố tạo liên kết làm bền phân tử sinh học." },
+  { id: 15, code: "015_Ribosome", word: "Ribosome", ipa: "/ˈraɪbəsəʊm/", defEn: "Cellular structure that synthesizes proteins.", defVi: "Cấu trúc tế bào thực hiện tổng hợp protein." },
+  { id: 16, code: "016_Amino_acid", word: "Amino acid", ipa: "/əˌmiːnəʊ ˈæsɪd/", defEn: "A monomer building block of proteins.", defVi: "Đơn phân cấu tạo nên chuỗi protein." },
+  { id: 17, code: "017_Protein", word: "Protein", ipa: "/ˈprəʊtiːn/", defEn: "A macromolecule composed of amino acids.", defVi: "Đại phân tử sinh học cấu tạo từ các amino acid." },
+  { id: 18, code: "018_Gene", word: "Gene", ipa: "/dʒiːn/", defEn: "A DNA sequence encoding a functional product.", defVi: "Đoạn trình tự DNA mã hóa cho sản phẩm chức năng." },
+  { id: 19, code: "019_Enzyme", word: "Enzyme", ipa: "/ˈenzaɪm/", defEn: "A biological catalyst accelerating chemical reactions.", defVi: "Chất xúc tác sinh học làm tăng tốc độ phản ứng." },
+  { id: 20, code: "020_Ribozyme", word: "Ribozyme", ipa: "/ˈraɪbəzaɪm/", defEn: "An RNA molecule with catalytic activity.", defVi: "Phân tử RNA có hoạt tính xúc tác." },
+  { id: 21, code: "021_Purin", word: "Purine", ipa: "/ˈpjʊəriːn/", defEn: "A double-ring nitrogenous base group.", defVi: "Nhóm base chứa nitrogen có cấu trúc hai vòng." },
+  { id: 22, code: "022_Uric_acid", word: "Uric acid", ipa: "/ˌjʊərɪk ˈæsɪd/", defEn: "A waste product of purine breakdown.", defVi: "Sản phẩm bài tiết từ quá trình chuyển hóa purine." },
+  { id: 23, code: "023_Goute", word: "Gout", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
 ];
 
 const ARENA_CONFIG = { validCode: "195", durationMinutes: 10 };
