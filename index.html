@@ -675,7 +675,7 @@
   </main>
 
   <script>
-    var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby_SAMPLE_CODE/exec";
+    var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycbyJq_3Le7ylM3QmD-bZBqAkxPkYK-BZHDQhK8UdXKrDc7lXEvwB4IBAL8vFIuRqftEz/exec";
 
     // 23 Thuật ngữ Unit 5: Biological Molecules[cite: 1, 2, 3]
     var VOCABULARY_DATA = [
@@ -1181,6 +1181,21 @@
       document.getElementById("review-stat-correct").innerText = "• Số câu trả lời đúng: " + correct + " / " + total + " câu";
       document.getElementById("review-stat-hints").innerText = "• Số lần sử dụng gợi ý (💡): " + usedHintsCount + " lần";
       showScreen("screen-review-result");
+      if (GOOGLE_SHEET_API_URL.indexOf("SAMPLE_CODE") === -1) {
+      fetch(GOOGLE_SHEET_API_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "luyen_tap",
+          name: currentUser.name,
+          className: currentUser.className,
+          correctCount: correct,
+          totalQuestions: total,
+          hintsCount: usedHintsCount
+        })
+      });
+    }
     }
 
     // ================= PHÂN HỆ ĐẤU TRƯỜNG (TỪNG CÂU MỘT) ================= //
@@ -1362,6 +1377,22 @@
       document.getElementById("arena-score-display").innerText = correctCount + " / 10";
       document.getElementById("arena-mark-display").innerText = "Điểm: " + score;
       showScreen("screen-arena-result");
+      if (GOOGLE_SHEET_API_URL.indexOf("SAMPLE_CODE") === -1) {
+      fetch(GOOGLE_SHEET_API_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "dau_truong",
+          name: currentUser.name,
+          className: currentUser.className,
+          roomCode: enteredRoomCode + " (" + activeExamKey + ")",
+          score: score,
+          correctCount: correctCount,
+          timeSpent: timeSpentStr
+        })
+      });
+    }
 
       if (GOOGLE_SHEET_API_URL.indexOf("SAMPLE_CODE") === -1) {
         fetch(GOOGLE_SHEET_API_URL, {
