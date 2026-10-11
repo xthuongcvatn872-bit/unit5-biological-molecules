@@ -216,7 +216,6 @@
     }
     .btn-nav-next:hover { background: #047857; }
 
-    /* Khung nét đứt trên trang học từ */
     .practice-dashed-box {
       border: 1.5px dashed #86efac;
       background: #f0fdf4;
@@ -299,7 +298,7 @@
       font-weight: 600;
     }
 
-    /* Các thành phần form */
+    /* Form & Trắc nghiệm */
     .form-group { text-align: left; margin: 16px 0; }
     .form-group label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 0.9rem; }
     .form-control { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 1rem; }
@@ -315,7 +314,7 @@
       border-radius: 20px;
       padding: 24px;
       margin: 20px 0;
-      min-height: 260px;
+      min-height: 270px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -367,29 +366,81 @@
       font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
-      margin-left: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
     .btn-hint:hover { background: #fde68a; }
     .hint-content-box {
       background: #fffbeb;
-      border: 1px solid #fef3c7;
-      border-radius: 10px;
-      padding: 10px 14px;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 12px 16px;
       color: #92400e;
       font-size: 0.9rem;
-      margin-top: 10px;
-      display: none;
+      margin-top: 12px;
+      width: 100%;
+      text-align: left;
     }
-    .dropdown-select-char {
-      padding: 10px 16px;
-      border: 2px solid var(--primary);
+    .ipa-badge-box {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #475569;
+      padding: 4px 14px;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-top: 8px;
+      letter-spacing: 0.5px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Khung từ điền khuyết với ô chọn nằm ngay trong từ */
+    .inline-fill-word {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin: 18px 0;
+    }
+    .char-block {
+      width: 44px;
+      height: 48px;
+      background: white;
+      border: 2px solid #cbd5e1;
       border-radius: 10px;
-      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #0f172a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .char-block.space {
+      width: 20px;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+    }
+    .inline-select-box {
+      width: 52px;
+      height: 48px;
+      border: 2.5px solid var(--primary);
+      border-radius: 10px;
+      background: #ecfdf5;
+      font-size: 1.4rem;
       font-weight: 800;
       color: var(--primary);
-      background: white;
+      text-align: center;
       cursor: pointer;
-      margin-top: 12px;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+      transition: all 0.2s;
+    }
+    .inline-select-box:focus {
+      box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.25);
     }
   </style>
 </head>
@@ -487,7 +538,7 @@
       </div>
     </section>
 
-    <!-- 3A. Màn hình Cổng Luyện tập: Chọn số lượng câu (10 hoặc 20 câu) -->
+    <!-- 3A. Màn hình Cổng Luyện tập: Chọn 10 hoặc 20 câu -->
     <section id="screen-review-setup" class="screen-panel">
       <div class="template-card" style="max-width: 520px; margin: 40px auto;">
         <span class="unit-pill">Bài kiểm tra tổng hợp</span>
@@ -541,7 +592,7 @@
       </div>
     </section>
 
-    <!-- 3C. Màn hình Kết quả Luyện tập (Báo cáo số câu đúng & số lần dùng gợi ý) -->
+    <!-- 3C. Màn hình Kết quả Luyện tập -->
     <section id="screen-review-result" class="screen-panel">
       <div class="template-card" style="max-width: 500px; margin: 30px auto;">
         <h2 style="color:var(--primary); font-size:1.6rem;">🎉 KẾT QUẢ LUYỆN TẬP</h2>
@@ -648,7 +699,6 @@
     var VALID_CODES = ["10A1", "10A2", "TUDO"];
     var ARENA_DURATION_MINUTES = 10;
 
-    // Ngân hàng 3 Bộ đề kiểm tra cuối giờ
     var ARENA_EXAMS = {
       "Bộ đề 1": [
         { id: 1, type: "mcq", question: "Mỗi nucleotide của RNA chứa loại đường 5 - carbon nào?", options: ["Deoxyribose", "Ribose", "Glucose", "Fructose"], answer: "Ribose" },
@@ -696,7 +746,7 @@
     var currentQuestionIdx = 0;
     var userCustomAnswers = {};
     var usedHintsCount = 0;
-    var hintedQuestionsMap = {};
+    var hintStateMap = {}; // Lưu cấp độ gợi ý (0: chưa, 1: tiếng Anh, 2: tiếng Việt)
 
     // Biến Đấu trường
     var activeExamKey = "";
@@ -804,11 +854,11 @@
       customQuestions = [];
       userCustomAnswers = {};
       usedHintsCount = 0;
-      hintedQuestionsMap = {};
+      hintStateMap = {};
       currentQuestionIdx = 0;
 
       var pIdx = 0;
-      // 1. Sắp xếp chữ cái (Lộn xộn ở trên, gõ máy ở dưới)
+      // 1. Sắp xếp chữ cái (Hiển thị phiên âm bên dưới + Gợi ý 2 nấc: Anh -> Việt)
       for (var i = 0; i < numScramble; i++) {
         var item = pool[pIdx++];
         var cleanW = item.word.toUpperCase().replace(/\s+/g, '');
@@ -821,19 +871,16 @@
         });
       }
 
-      // 2. Điền khuyết 1 chữ cái (Thanh gợi ý sổ xuống)
+      // 2. Điền khuyết 1 chữ cái (Nút gợi ý nằm ngay vị trí khuyết, chọn là hiện chữ)
       for (var j = 0; j < numFill; j++) {
         var fItem = pool[pIdx++];
-        var letters = fItem.word.toUpperCase().split('');
-        // Tìm các vị trí là chữ cái (không phải khoảng trắng)
+        var chars = fItem.word.toUpperCase().split('');
         var validPos = [];
-        for (var k = 0; k < letters.length; k++) {
-          if (letters[k] >= 'A' && letters[k] <= 'Z') validPos.push(k);
+        for (var k = 0; k < chars.length; k++) {
+          if (chars[k] >= 'A' && chars[k] <= 'Z') validPos.push(k);
         }
         var blankPos = validPos[Math.floor(Math.random() * validPos.length)];
-        var missingChar = letters[blankPos];
-        var maskedWord = letters.slice();
-        maskedWord[blankPos] = "_";
+        var missingChar = chars[blankPos];
 
         // Tạo 4 phương án cho dropdown
         var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -847,7 +894,8 @@
         customQuestions.push({
           type: "fill",
           item: fItem,
-          maskedWord: maskedWord.join(' '),
+          charsArray: chars,
+          blankPos: blankPos,
           missingChar: missingChar,
           charOptions: optionsSet
         });
@@ -868,7 +916,7 @@
         });
       }
 
-      // Xáo trộn toàn bộ câu hỏi trong đề
+      // Xáo trộn ngẫu nhiên đề thi
       customQuestions.sort(function() { return Math.random() - 0.5; });
 
       renderReviewNavigationGrid();
@@ -896,7 +944,6 @@
       var q = customQuestions[index];
       var total = customQuestions.length;
 
-      // Cập nhật tiêu đề & thanh số thứ tự
       document.getElementById("review-q-counter").innerText = "Câu " + (index + 1) + " / " + total;
       var badge = document.getElementById("review-type-badge");
       if (q.type === "scramble") badge.innerText = "🧩 Dạng 1: Sắp xếp chữ cái";
@@ -916,7 +963,7 @@
       var curBtn = document.getElementById("q-step-" + index);
       if (curBtn) curBtn.classList.add("current");
 
-      // Cập nhật nút điều hướng
+      // Nút điều hướng
       document.getElementById("btn-review-prev-q").style.visibility = (index === 0) ? "hidden" : "visible";
       if (index === total - 1) {
         document.getElementById("btn-review-next-q").style.display = "none";
@@ -929,41 +976,75 @@
       var container = document.getElementById("single-question-container");
       container.innerHTML = "";
 
-      // Render nội dung theo dạng
+      // 1. Dạng Sắp xếp chữ cái
       if (q.type === "scramble") {
-        var html = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:12px;'>Quan sát các chữ cái bị đảo lộn và gõ lại thuật ngữ tiếng Anh chính xác:</div>";
+        var html = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:8px;'>Sắp xếp các chữ cái sau thành từ vựng tiếng Anh đúng:</div>";
         html += "<div class='scramble-badges'>";
         q.shuffledLetters.forEach(function(ch) {
           html += "<div class='letter-badge'>" + ch + "</div>";
         });
         html += "</div>";
-        html += "<div style='width:100%; max-width:420px; margin-top:14px;'>";
+
+        // Phiên âm bên dưới chữ cái lộn xộn
+        html += "<div><span class='ipa-badge-box'>🔊 Phiên âm IPA: " + q.item.ipa + "</span></div>";
+
+        // Nút gợi ý 2 nấc
+        html += "<div style='margin-top:14px;'>";
+        html += "<button class='btn-hint' onclick='handleScrambleHint(" + index + ")'>💡 Gợi ý (Bấm để xem định nghĩa)</button>";
+        html += "<div id='scramble-hint-box-" + index + "' class='hint-content-box' style='display:none;'></div>";
+        html += "</div>";
+
+        // Ô nhập đánh máy
+        html += "<div style='width:100%; max-width:420px; margin-top:16px;'>";
         html += "<input type='text' id='scramble-input-q' class='input-word-field' style='width:100%; text-align:center; font-weight:700; font-size:1.15rem;' placeholder='Nhập đáp án đánh máy...' value='" + (userCustomAnswers[index] || "") + "' oninput='saveCustomAnswer(" + index + ", this.value.trim().toUpperCase())'>";
         html += "</div>";
         container.innerHTML = html;
+
+        // Giữ trạng thái gợi ý nếu đã bấm trước đó
+        restoreScrambleHintState(index);
       } 
+
+      // 2. Dạng Điền khuyết 1 chữ cái (Nút chọn nằm ngay vị trí chữ bị thiếu)
       else if (q.type === "fill") {
-        var fHtml = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:10px;'>Định nghĩa: <i>\"" + q.item.defEn + "\"</i></div>";
-        fHtml += "<div style='font-size:1.7rem; font-weight:800; letter-spacing:4px; color:var(--secondary); margin:12px 0;'>" + q.maskedWord + "</div>";
-        fHtml += "<div style='margin-top:10px;'>";
-        fHtml += "<label style='display:block; font-size:0.9rem; font-weight:700; margin-bottom:6px;'>Chọn chữ cái còn thiếu tại vị trí dấu gạch dưới (_):</label>";
-        fHtml += "<select class='dropdown-select-char' onchange='saveCustomAnswer(" + index + ", this.value)'>";
-        fHtml += "<option value=''>-- Chọn chữ cái ▼ --</option>";
-        q.charOptions.forEach(function(optChar) {
-          var sel = (userCustomAnswers[index] === optChar) ? " selected" : "";
-          fHtml += "<option value='" + optChar + "'" + sel + ">" + optChar + "</option>";
-        });
-        fHtml += "</select>";
+        var fHtml = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:12px;'>Chọn chữ cái còn thiếu trực tiếp tại ô chấm hỏi [ ? ] để hoàn thành từ:</div>";
+        
+        fHtml += "<div class='inline-fill-word'>";
+        var currentChosen = userCustomAnswers[index] || "";
+
+        for (var c = 0; c < q.charsArray.length; c++) {
+          if (c === q.blankPos) {
+            // Dropdown nằm ngay vị trí khuyết
+            fHtml += "<select class='inline-select-box' onchange='handleInlineCharSelect(" + index + ", this.value)'>";
+            fHtml += "<option value=''>?</option>";
+            q.charOptions.forEach(function(optChar) {
+              var sel = (currentChosen === optChar) ? " selected" : "";
+              fHtml += "<option value='" + optChar + "'" + sel + ">" + optChar + "</option>";
+            });
+            fHtml += "</select>";
+          } else if (q.charsArray[c] === ' ') {
+            fHtml += "<div class='char-block space'></div>";
+          } else {
+            fHtml += "<div class='char-block'>" + q.charsArray[c] + "</div>";
+          }
+        }
         fHtml += "</div>";
+
+        // Hiển thị định nghĩa tiếng Anh bên dưới
+        fHtml += "<div style='font-size:0.95rem; color:#0369a1; background:#f0f9ff; border:1px solid #bae6fd; padding:10px 16px; border-radius:12px; margin-top:8px;'>";
+        fHtml += "<b>Định nghĩa:</b> <i>\"" + q.item.defEn + "\"</i>";
+        fHtml += "</div>";
+
         container.innerHTML = fHtml;
       } 
+
+      // 3. Dạng Trắc nghiệm định nghĩa
       else if (q.type === "mcq") {
         var mHtml = "<div style='width:100%; text-align:left;'>";
-        mHtml += "<div style='display:flex; justify-content:space-between; align-items:flex-start;'>";
+        mHtml += "<div style='display:flex; justify-content:space-between; align-items:flex-start; gap:10px;'>";
         mHtml += "<div style='font-size:1.1rem; font-weight:700; color:#0f172a;'>Định nghĩa: <span style='color:#0284c7;'>\"" + q.item.defEn + "\"</span></div>";
-        mHtml += "<button class='btn-hint' onclick='toggleQuestionHint(" + index + ")'>💡 Gợi ý</button>";
+        mHtml += "<button class='btn-hint' onclick='toggleMcqHint(" + index + ")'>💡 Gợi ý</button>";
         mHtml += "</div>";
-        mHtml += "<div id='hint-box-" + index + "' class='hint-content-box'><b>Gợi ý tiếng Việt:</b> " + q.item.defVi + "</div>";
+        mHtml += "<div id='mcq-hint-box-" + index + "' class='hint-content-box' style='display:none;'><b>Gợi ý tiếng Việt:</b> " + q.item.defVi + "</div>";
         mHtml += "<div class='quiz-options' style='margin-top:16px;'>";
         q.options.forEach(function(opt) {
           var isSel = (userCustomAnswers[index] === opt.word) ? " selected" : "";
@@ -972,18 +1053,65 @@
         mHtml += "</div></div>";
         container.innerHTML = mHtml;
 
-        // Nếu câu này trước đó đã bấm mở gợi ý thì giữ hiển thị
-        if (hintedQuestionsMap[index]) {
-          var hBox = document.getElementById("hint-box-" + index);
+        if (hintStateMap[index]) {
+          var hBox = document.getElementById("mcq-hint-box-" + index);
           if (hBox) hBox.style.display = "block";
         }
       }
     }
 
+    // Xử lý gợi ý 2 nấc cho câu Sắp xếp chữ cái
+    function handleScrambleHint(idx) {
+      var state = hintStateMap[idx] || 0;
+      var q = customQuestions[idx];
+      var box = document.getElementById("scramble-hint-box-" + idx);
+      if (!box) return;
+
+      if (state === 0) {
+        // Lần 1: Hiện định nghĩa tiếng Anh
+        hintStateMap[idx] = 1;
+        usedHintsCount++;
+        box.style.display = "block";
+        box.innerHTML = "<b>💡 Gợi ý 1 (Định nghĩa tiếng Anh):</b> <i>\"" + q.item.defEn + "\"</i><br><small style='color:#b45309; display:block; margin-top:4px;'>(Bấm nút 'Gợi ý' lần nữa để xem nghĩa tiếng Việt)</small>";
+      } else if (state === 1) {
+        // Lần 2: Hiện thêm nghĩa tiếng Việt
+        hintStateMap[idx] = 2;
+        usedHintsCount++;
+        box.style.display = "block";
+        box.innerHTML = "<b>💡 Gợi ý 1 (Tiếng Anh):</b> <i>\"" + q.item.defEn + "\"</i><br>" +
+                        "<b style='color:#059669; display:block; margin-top:6px;'>💡 Gợi ý 2 (Tiếng Việt):</b> " + q.item.defVi;
+      }
+    }
+
+    function restoreScrambleHintState(idx) {
+      var state = hintStateMap[idx] || 0;
+      var q = customQuestions[idx];
+      var box = document.getElementById("scramble-hint-box-" + idx);
+      if (!box) return;
+      if (state === 1) {
+        box.style.display = "block";
+        box.innerHTML = "<b>💡 Gợi ý 1 (Định nghĩa tiếng Anh):</b> <i>\"" + q.item.defEn + "\"</i><br><small style='color:#b45309; display:block; margin-top:4px;'>(Bấm nút 'Gợi ý' lần nữa để xem nghĩa tiếng Việt)</small>";
+      } else if (state === 2) {
+        box.style.display = "block";
+        box.innerHTML = "<b>💡 Gợi ý 1 (Tiếng Anh):</b> <i>\"" + q.item.defEn + "\"</i><br>" +
+                        "<b style='color:#059669; display:block; margin-top:6px;'>💡 Gợi ý 2 (Tiếng Việt):</b> " + q.item.defVi;
+      }
+    }
+
+    // Xử lý chọn chữ cái điền khuyết trực tiếp
+    function handleInlineCharSelect(idx, charVal) {
+      saveCustomAnswer(idx, charVal);
+      // Vẽ lại câu để chữ cái hiển thị rõ ràng tại chỗ
+      renderSingleReviewQuestion(idx);
+    }
+
     function saveCustomAnswer(idx, val) {
       userCustomAnswers[idx] = val;
       var stepBtn = document.getElementById("q-step-" + idx);
-      if (stepBtn && val !== "") stepBtn.classList.add("done");
+      if (stepBtn) {
+        if (val !== "") stepBtn.classList.add("done");
+        else stepBtn.classList.remove("done");
+      }
     }
 
     function selectMcqCustom(idx, val, btnElem) {
@@ -994,15 +1122,15 @@
       btnElem.classList.add("selected");
     }
 
-    function toggleQuestionHint(idx) {
-      var hBox = document.getElementById("hint-box-" + idx);
+    function toggleMcqHint(idx) {
+      var hBox = document.getElementById("mcq-hint-box-" + idx);
       if (!hBox) return;
       if (hBox.style.display === "block") {
         hBox.style.display = "none";
       } else {
         hBox.style.display = "block";
-        if (!hintedQuestionsMap[idx]) {
-          hintedQuestionsMap[idx] = true;
+        if (!hintStateMap[idx]) {
+          hintStateMap[idx] = 1;
           usedHintsCount++;
         }
       }
@@ -1145,7 +1273,7 @@
       }
     }
 
-    // Tự động khởi chạy từ vựng đầu tiên
+    // Tự động khởi tạo từ đầu tiên
     renderVocabCard(0);
   </script>
 </body>
