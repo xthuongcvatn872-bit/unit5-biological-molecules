@@ -84,7 +84,7 @@
     }
     .btn-arena-nav:hover { transform: translateY(-2px); }
 
-    /* Khung thẻ bo tròn */
+    /* Khung thẻ chính */
     .main-content {
       flex: 1;
       max-width: 980px;
@@ -185,7 +185,7 @@
       display: block;
     }
 
-    /* Hai nút Previous & Next */
+    /* Cặp nút chuyển trang */
     .nav-buttons-row {
       display: flex;
       justify-content: center;
@@ -279,7 +279,7 @@
     }
     .btn-check-green:hover { background: #047857; }
 
-    /* Nút cam lớn */
+    /* Nút cam bài kiểm tra tổng hợp */
     .btn-orange-quiz {
       background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
       color: white;
@@ -301,7 +301,7 @@
       font-weight: 600;
     }
 
-    /* Đăng nhập, Bài tập & Đấu trường */
+    /* Các thành phần form & trắc nghiệm */
     .form-group { text-align: left; margin: 16px 0; }
     .form-group label { display: block; margin-bottom: 6px; font-weight: 700; font-size: 0.9rem; }
     .form-control { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 1rem; }
@@ -313,13 +313,13 @@
 </head>
 <body>
 
-  <!-- Header chung -->
+  <!-- Thanh Header -->
   <header class="app-header">
     <div class="header-container">
       <div class="school-badge">TRƯỜNG THPT CHU VĂN AN - THÁI NGUYÊN</div>
       <div class="header-right">
-        <div class="views-pill">👁️ Lượt tham gia: <span id="views-count">1</span></div>
-        <button id="btn-arena-header" class="btn-arena-nav" onclick="openArenaLobby()">⚔️ Đấu trường Sinh học</button>
+        <div class="views-pill">👁️ Lượt tham gia: <span id="views-count">12</span></div>
+        <button class="btn-arena-nav" onclick="openArenaLobby()">⚔️ Đấu trường Sinh học</button>
       </div>
     </div>
   </header>
@@ -335,15 +335,15 @@
         
         <div class="form-group" style="margin-top: 24px;">
           <label>Họ và tên học sinh:</label>
-          <input type="text" id="student-name" class="form-control" placeholder="Ví dụ: Nguyễn Minh Thư" value="Nguyễn Minh Thư">
+          <input type="text" id="student-name" class="form-control" value="Nguyễn Minh Thư">
         </div>
         
         <div class="form-group">
           <label>Lớp học:</label>
-          <input type="text" id="student-class" class="form-control" placeholder="Ví dụ: 10A1" value="10A1">
+          <input type="text" id="student-class" class="form-control" value="10A1">
         </div>
         
-        <button id="btn-start-app" class="btn-nav-next" style="width: 100%; padding: 14px; font-size: 1.05rem; margin-top: 10px;" onclick="handleStartLearning()">
+        <button class="btn-nav-next" style="width: 100%; padding: 14px; font-size: 1.05rem; margin-top: 10px;" onclick="handleStartLearning()">
           🚀 Bắt đầu học bài
         </button>
       </div>
@@ -362,7 +362,6 @@
 
         <!-- Khung 2 cột: Trái (Ảnh + Audio) | Phải (Video) -->
         <div class="media-grid-pair">
-          
           <div class="media-sub-card">
             <div>
               <img id="vocab-img" class="vocab-img-display" src="" alt="Infographic thuật ngữ">
@@ -379,7 +378,6 @@
               <video id="vocab-video" controls playsinline></video>
             </div>
           </div>
-
         </div>
 
         <!-- Cặp nút Previous & Next -->
@@ -396,14 +394,14 @@
           
           <div class="check-input-row">
             <input type="text" id="input-check-word" class="input-word-field" placeholder="Gõ từ hoàn chỉnh..." onkeypress="if(event.key==='Enter') checkUserSpelling();">
-            <button id="btn-check-word" class="btn-check-green" onclick="checkUserSpelling()">Kiểm tra</button>
+            <button class="btn-check-green" onclick="checkUserSpelling()">Kiểm tra</button>
           </div>
           <div id="check-feedback" style="min-height: 24px; margin-top: 10px; font-weight: 700;"></div>
         </div>
 
-        <!-- Nút cam dẫn tới bài kiểm tra 20 câu -->
+        <!-- Nút cam dẫn tới bài kiểm tra tổng hợp 20 câu -->
         <div>
-          <button id="btn-open-review" class="btn-orange-quiz" onclick="generateReviewQuiz()">
+          <button class="btn-orange-quiz" onclick="generateReviewQuiz()">
             🚀 Đi đến Bài kiểm tra tổng hợp Unit 5 (20 câu)
           </button>
         </div>
@@ -424,14 +422,14 @@
         </div>
         <div id="review-questions-list"></div>
         <div style="text-align:center; margin-top:30px;">
-          <button id="btn-submit-review" class="btn-nav-next" style="padding:14px 40px; font-size:1.05rem;" onclick="submitReviewQuiz()">
+          <button class="btn-nav-next" style="padding:14px 40px; font-size:1.05rem;" onclick="submitReviewQuiz()">
             ✅ Nộp bài tập tổng hợp
           </button>
         </div>
       </div>
     </section>
 
-    <!-- 4. Cổng Đấu trường (Mã vào: 10A1, 10A2, hoặc TUDO) -->
+    <!-- 4. Cổng Đấu trường (Mã: 10A1, 10A2, TUDO) -->
     <section id="screen-arena-lobby" class="screen-panel">
       <div class="template-card" style="max-width: 540px; margin: 30px auto;">
         <h2 style="color:var(--accent); font-size:1.5rem;">⚔️ CỔNG ĐẤU TRƯỜNG SINH HỌC</h2>
@@ -445,7 +443,7 @@
           <input type="text" id="arena-code-input" class="form-control" style="font-size:1.5rem; letter-spacing:4px; text-align:center; max-width:240px; margin:0 auto; text-transform:uppercase;" onkeypress="if(event.key==='Enter') startArenaContest();">
         </div>
 
-        <button id="btn-arena-enter" class="btn-orange-quiz" style="width:100%; padding:14px;" onclick="startArenaContest()">
+        <button class="btn-orange-quiz" style="width:100%; padding:14px;" onclick="startArenaContest()">
           🚪 Vào phòng thi đấu
         </button>
       </div>
@@ -463,7 +461,7 @@
         </div>
         <div id="arena-questions-container"></div>
         <div style="text-align:center; margin-top:30px;">
-          <button id="btn-submit-arena" class="btn-orange-quiz" style="padding:14px 40px;" onclick="if(confirm('Xác nhận nộp bài Đấu trường?')) submitArena();">
+          <button class="btn-orange-quiz" style="padding:14px 40px;" onclick="if(confirm('Xác nhận nộp bài Đấu trường?')) submitArena();">
             🏁 Nộp bài Đấu trường
           </button>
         </div>
@@ -487,11 +485,9 @@
   </main>
 
   <script>
-    // Dán link Web App URL Google Script của thầy/cô vào đây (nếu có):
-    const GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby_SAMPLE_CODE/exec";
+    var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby_SAMPLE_CODE/exec";
 
-    // 23 Thuật ngữ Unit 5: Biological Molecules
-    const VOCABULARY_DATA = [
+    var VOCABULARY_DATA = [
       { id: 1, code: "001_Ribonucleic_acid", word: "Ribonucleic acid", ipa: "/ˌraɪbəʊnjuːˌkliːɪk ˈæsɪd/", defEn: "A nucleic acid essential for protein synthesis.", defVi: "Nucleic acid cần cho quá trình tổng hợp protein." },
       { id: 2, code: "002_DNA", word: "DNA", ipa: "/ˌdiː.enˈeɪ/", defEn: "Molecule carrying genetic instructions for living organisms.", defVi: "Phân tử mang thông tin di truyền của sinh vật." },
       { id: 3, code: "003_RNA", word: "RNA", ipa: "/ˌɑː.enˈeɪ/", defEn: "Single-stranded nucleic acid involved in protein synthesis.", defVi: "Nucleic acid mạch đơn tham gia tổng hợp protein." },
@@ -517,13 +513,41 @@
       { id: 23, code: "023_Gout", word: "Gout", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
     ];
 
-    const VALID_CODES = ["10A1", "10A2", "TUDO"];
-    const ARENA_DURATION_MINUTES = 10;
+    var VALID_CODES = ["10A1", "10A2", "TUDO"];
+    var ARENA_DURATION_MINUTES = 10;
 
-    const ARENA_EXAMS = {
+    var ARENA_EXAMS = {
       "Bộ đề 1": [
         { id: 1, type: "mcq", question: "Mỗi nucleotide của RNA chứa loại đường 5 - carbon nào?", options: ["Deoxyribose", "Ribose", "Glucose", "Fructose"], answer: "Ribose" },
         { id: 2, type: "mcq", question: "Phân tử RNA nào làm khuôn để tổng hợp protein ở ribosome?", options: ["mRNA", "tRNA", "rRNA", "Ribozyme"], answer: "mRNA" },
         { id: 3, type: "mcq", question: "Base nào sau đây tham gia cấu tạo RNA nhưng không có ở DNA?", options: ["Adenine", "Uracil", "Guanine", "Cytosine"], answer: "Uracil" },
         { id: 4, type: "mcq", question: "Ở tRNA, các vùng tự bắt đôi liên kết với nhau bằng loại liên kết nào?", options: ["Peptide", "Glycosidic", "Hydrogen", "Phosphodiester"], answer: "Hydrogen" },
-        { id: 5, type: "mcq", question: "So với DNA
+        { id: 5, type: "mcq", question: "So với DNA, RNA có đặc điểm cấu trúc nào sau đây?", options: ["Luôn có 2 chuỗi xoắn kép", "Chứa đường deoxyribose", "Chủ yếu gồm 1 chuỗi polynucleotide", "Chứa base Thymine"], answer: "Chủ yếu gồm 1 chuỗi polynucleotide" },
+        { id: 6, type: "tf", question: "Nhận định: mRNA chỉ gồm một chuỗi polynucleotide dạng mạch thẳng.", answer: "Đúng" },
+        { id: 7, type: "tf", question: "Nhận định: Ribozyme là phân tử RNA có khả năng xúc tác hóa học như enzyme.", answer: "Đúng" },
+        { id: 8, type: "tf", question: "Nhận định: Giống như DNA, trong phân tử RNA số lượng nucleotide A luôn bằng U.", answer: "Sai" },
+        { id: 9, type: "num", question: "Mỗi nucleotide cấu tạo nên RNA được tạo thành từ bao nhiêu thành phần hóa học?", answer: "3" },
+        { id: 10, type: "num", question: "Giữa một cặp base liên kết bổ sung Guanine (G) và Cytosine (C) trên phân tử tRNA có bao nhiêu liên kết hydrogen?", answer: "3" }
+      ],
+      "Bộ đề 2": [
+        { id: 1, type: "mcq", question: "Phân tử RNA nào tham gia cấu tạo nên bào quan ribosome?", options: ["mRNA", "tRNA", "rRNA", "Ribozyme"], answer: "rRNA" },
+        { id: 2, type: "mcq", question: "Phân tử RNA làm nhiệm vụ vận chuyển amino acid đến ribosome là?", options: ["tRNA", "mRNA", "rRNA", "RNA nhỏ"], answer: "tRNA" },
+        { id: 3, type: "mcq", question: "Vị trí trên tRNA khớp bổ sung với mã sao trên mRNA gọi là gì?", options: ["Vị trí gắn amino acid", "Bộ ba đối mã", "Bộ khung đường", "Gốc phosphate"], answer: "Bộ ba đối mã" },
+        { id: 4, type: "mcq", question: "Cấu trúc phân tử DNA khác với RNA ở đặc điểm nào sau đây?", options: ["Cấu tạo theo nguyên tắc đa phân", "Gồm hai chuỗi polynucleotide", "Đơn phân có gốc phosphate", "Có chứa base Adenine"], answer: "Gồm hai chuỗi polynucleotide" },
+        { id: 5, type: "mcq", question: "Các phân tử RNA nhỏ trong tế bào đảm nhận chức năng nào?", options: ["Làm khuôn dịch mã", "Vận chuyển amino acid", "Cấu tạo ribosome", "Điều hoà hoạt động gene"], answer: "Điều hoà hoạt động gene" },
+        { id: 6, type: "tf", question: "Nhận định: Đa số các loại phân tử RNA được cấu tạo từ hai chuỗi xoắn kép.", answer: "Sai" },
+        { id: 7, type: "tf", question: "Nhận định: Trên phân tử tRNA có vị trí đặc hiệu để gắn kết với amino acid.", answer: "Đúng" },
+        { id: 8, type: "tf", question: "Nhận định: Trong tế bào sống, mọi phân tử có chức năng xúc tác đều là protein.", answer: "Sai" },
+        { id: 9, type: "num", question: "Có bao nhiêu loại nitrogenous base chính tham gia cấu tạo nên phân tử RNA?", answer: "4" },
+        { id: 10, type: "num", question: "Giữa một cặp base liên kết bổ sung Adenine (A) và Uracil (U) trên phân tử tRNA có bao nhiêu liên kết hydrogen?", answer: "2" }
+      ],
+      "Bộ đề 3": [
+        { id: 1, type: "mcq", question: "Đơn phân của RNA không có loại nitrogenous base nào sau đây?", options: ["Adenine", "Uracil", "Guanine", "Thymine"], answer: "Thymine" },
+        { id: 2, type: "mcq", question: "Loại mô động vật nào chứa rất nhiều DNA thường dùng để tách chiết?", options: ["Mô gan", "Mô mỡ", "Mô xương", "Biểu bì"], answer: "Mô gan" },
+        { id: 3, type: "mcq", question: "Yếu tố nào giúp tRNA có cấu trúc không gian 3 chiều đặc trưng?", options: ["Mạch thẳng dài", "Các vùng tự bắt đôi bổ sung", "Chứa đường glucose", "Có cấu trúc 2 mạch"], answer: "Các vùng tự bắt đôi bổ sung" },
+        { id: 4, type: "mcq", question: "Điểm khác biệt về loại đường giữa phân tử DNA và RNA là?", options: ["DNA chứa deoxyribose, RNA chứa ribose", "DNA chứa ribose, RNA chứa deoxyribose", "DNA chứa glucose, RNA chứa ribose", "DNA chứa fructose, RNA chứa glucose"], answer: "DNA chứa deoxyribose, RNA chứa ribose" },
+        { id: 5, type: "mcq", question: "Khi bị rối loạn chuyển hoá, ăn nhiều thức ăn giàu nucleic acid dễ gây bệnh gì?", options: ["Bướu cổ", "Tiểu đường", "Bệnh gút (goute)", "Béo phì"], answer: "Bệnh gút (goute)" },
+        { id: 6, type: "tf", question: "Nhận định: Tất cả các loại phân tử RNA trong tế bào đều chỉ có dạng mạch thẳng.", answer: "Sai" },
+        { id: 7, type: "tf", question: "Nhận định: Ở tRNA, các vùng tự bắt đôi liên kết theo kiểu A – U và G – C.", answer: "Đúng" },
+        { id: 8, type: "tf", question: "Nhận định: So với protein, phân tử DNA đảm nhận nhiều loại chức năng hơn.", answer: "Sai" },
+        { id: 9, type: "num", question: "Đường ribose trong đơn phân nucleotide của RNA có bao nhiêu nguyên tử carbon?", answer: "5" },
