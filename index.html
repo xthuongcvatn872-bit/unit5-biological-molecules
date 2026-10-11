@@ -6,7 +6,7 @@
   <title>Unit 5: Biological Molecules - THPT Chu Văn An</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://script.google.com/macros/s/AKfycby-JLUeA5_YK9G7oCdhpuFRQrqw4wujei0OFWdiI9V8_n8qLU5BTa-dbnyUve-i_dPKcw/exec">
   
   <style>
     :root {
@@ -307,7 +307,7 @@
     .quiz-opt-btn:hover { border-color: var(--primary); }
     .quiz-opt-btn.selected { border-color: var(--primary); background: #ecfdf5; color: var(--primary); }
 
-    /* CSS Giao diện Luyện tập */
+    /* CSS Giao diện Từng câu một */
     .question-slide-box {
       background: #f8fafc;
       border: 1.5px solid #e2e8f0;
@@ -338,14 +338,15 @@
       margin: 18px 0;
     }
     .q-step-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       border: 1.5px solid #cbd5e1;
       background: white;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       cursor: pointer;
+      transition: all 0.15s;
     }
     .q-step-btn.current {
       background: var(--primary);
@@ -401,7 +402,7 @@
       border: 1px solid #cbd5e1;
     }
 
-    /* Khung từ điền khuyết với ô chọn nằm ngay trong từ */
+    /* Điền khuyết */
     .inline-fill-word {
       display: flex;
       flex-wrap: wrap;
@@ -444,9 +445,6 @@
       outline: none;
       box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
       transition: all 0.2s;
-    }
-    .inline-select-box:focus {
-      box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.25);
     }
   </style>
 </head>
@@ -582,13 +580,9 @@
           <button class="btn-nav-prev" style="padding:6px 16px; font-size:0.85rem;" onclick="if(confirm('Thoát bài luyện tập?')) showScreen('screen-vocab');">Thoát</button>
         </div>
 
-        <!-- Khung nội dung 1 câu hỏi -->
         <div id="single-question-container" class="question-slide-box"></div>
-
-        <!-- Bảng danh sách câu nhảy nhanh -->
         <div id="review-nav-grid" class="question-nav-grid"></div>
 
-        <!-- Điều hướng Previous / Next / Nộp bài -->
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
           <button id="btn-review-prev-q" class="btn-nav-prev" onclick="navReviewQuestion(-1)">◄ Câu trước</button>
           <button id="btn-review-next-q" class="btn-nav-next" onclick="navReviewQuestion(1)">Câu tiếp theo ►</button>
@@ -637,22 +631,30 @@
       </div>
     </section>
 
-    <!-- 5. Màn hình Đang thi Đấu trường -->
+    <!-- 5. Màn hình Đang thi Đấu trường (TỪNG CÂU MỘT TRÊN 1 MÀN HÌNH) -->
     <section id="screen-arena-board" class="screen-panel">
       <div class="template-card" style="text-align: left;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px; border-bottom:1.5px solid #f1f5f9; padding-bottom:14px;">
           <div>
-            <h3 style="color:var(--accent); font-size:1.3rem;">Đấu trường Sinh học</h3>
-            <span id="arena-exam-name" style="font-size:0.9rem; font-weight:700; color:var(--primary);"></span>
+            <h3 style="color:var(--accent); font-size:1.3rem;">Đấu trường Sinh học <span id="arena-exam-name" style="font-size:0.95rem; font-weight:700; color:var(--primary);"></span></h3>
+            <span id="arena-q-counter" style="font-size:1.1rem; font-weight:800; color:var(--secondary);">Câu 1 / 10</span>
           </div>
           <div id="arena-timer" style="font-size:1.35rem; font-weight:800; color:#ef4444;">⏱️ 10:00</div>
         </div>
-        <div id="arena-questions-container"></div>
-        <div style="text-align:center; margin-top:30px;">
-          <button class="btn-orange-quiz" style="padding:14px 40px;" onclick="if(confirm('Xác nhận nộp bài Đấu trường?')) submitArena();">
-            🏁 Nộp bài Đấu trường
-          </button>
+
+        <!-- Khung hiển thị nội dung 1 câu hỏi Đấu trường -->
+        <div id="arena-single-question-container" class="question-slide-box"></div>
+
+        <!-- Bảng danh sách 10 câu nhảy nhanh -->
+        <div id="arena-nav-grid" class="question-nav-grid"></div>
+
+        <!-- Điều hướng Previous / Next / Nộp bài Đấu trường -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+          <button id="btn-arena-prev-q" class="btn-nav-prev" onclick="navArenaQuestion(-1)">◄ Câu trước</button>
+          <button id="btn-arena-next-q" class="btn-nav-next" onclick="navArenaQuestion(1)">Câu tiếp theo ►</button>
+          <button id="btn-arena-submit-q" class="btn-orange-quiz" style="display:none; padding:10px 24px;" onclick="if(confirm('Xác nhận nộp bài Đấu trường?')) submitArena();">🏁 Nộp bài Đấu trường</button>
         </div>
+
       </div>
     </section>
 
@@ -705,6 +707,7 @@
     var VALID_CODES = ["10A1", "10A2", "TUDO"];
     var ARENA_DURATION_MINUTES = 10;
 
+    // Ngân hàng 3 Bộ đề kiểm tra cuối giờ[cite: 1, 2, 3]
     var ARENA_EXAMS = {
       "Bộ đề 1": [
         { id: 1, type: "mcq", question: "Mỗi nucleotide của RNA chứa loại đường 5 - carbon nào?", options: ["Deoxyribose", "Ribose", "Glucose", "Fructose"], answer: "Ribose" },
@@ -752,11 +755,12 @@
     var currentQuestionIdx = 0;
     var userCustomAnswers = {};
     var usedHintsCount = 0;
-    var hintStateMap = {}; // Lưu trạng thái gợi ý: { hint1: bool, hint2: bool }
+    var hintStateMap = {};
 
-    // Biến Đấu trường
+    // Biến cho Đấu trường (Từng câu một)
     var activeExamKey = "";
     var activeQuestions = [];
+    var currentArenaQuestionIdx = 0;
     var arenaUserAnswers = {};
     var arenaTimerInterval = null;
     var arenaTimeRemaining = ARENA_DURATION_MINUTES * 60;
@@ -772,7 +776,28 @@
       window.scrollTo(0, 0);
     }
 
-    // Xử lý thông tin học sinh (Tự động gán mã 4 số nếu để trống)
+    // Xử lý bộ đếm lượt truy cập (Tự động tăng mỗi lượt mở trang)
+    function updateVisitorCount() {
+      var localViews = localStorage.getItem("unit5_local_views");
+      var currentCount = localViews ? parseInt(localViews, 10) : 12;
+      currentCount += 1;
+      localStorage.setItem("unit5_local_views", currentCount);
+      document.getElementById("views-count").innerText = currentCount;
+
+      // Đồng bộ nếu có link Google Sheets Apps Script
+      if (GOOGLE_SHEET_API_URL.indexOf("SAMPLE_CODE") === -1) {
+        fetch(GOOGLE_SHEET_API_URL)
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            if (data && data.views) {
+              document.getElementById("views-count").innerText = data.views;
+            }
+          })
+          .catch(function() {});
+      }
+    }
+
+    // Thông tin học sinh (Tự động gán mã 4 số nếu để trống)
     function handleStartLearning() {
       var nameVal = document.getElementById("student-name").value.trim();
       var classVal = document.getElementById("student-class").value.trim();
@@ -865,9 +890,9 @@
 
     function startCustomReviewQuiz() {
       var count = parseInt(document.getElementById("review-count-select").value, 10);
-      var numScramble = Math.round(count * 0.3); // 3 hoặc 6
-      var numFill = Math.round(count * 0.3);     // 3 hoặc 6
-      var numMcq = count - numScramble - numFill; // 4 hoặc 8
+      var numScramble = Math.round(count * 0.3);
+      var numFill = Math.round(count * 0.3);
+      var numMcq = count - numScramble - numFill;
 
       var pool = VOCABULARY_DATA.slice().sort(function() { return Math.random() - 0.5; });
       customQuestions = [];
@@ -877,7 +902,6 @@
       currentQuestionIdx = 0;
 
       var pIdx = 0;
-      // 1. Sắp xếp chữ cái
       for (var i = 0; i < numScramble; i++) {
         var item = pool[pIdx++];
         var cleanW = item.word.toUpperCase().replace(/\s+/g, '');
@@ -890,7 +914,6 @@
         });
       }
 
-      // 2. Điền khuyết 1 chữ cái (Không có gợi ý nào)
       for (var j = 0; j < numFill; j++) {
         var fItem = pool[pIdx++];
         var chars = fItem.word.toUpperCase().split('');
@@ -919,7 +942,6 @@
         });
       }
 
-      // 3. Trắc nghiệm định nghĩa tiếng Anh
       for (var m = 0; m < numMcq; m++) {
         var mItem = pool[pIdx++];
         var wrongPool = VOCABULARY_DATA.filter(function(v) { return v.id !== mItem.id; })
@@ -991,7 +1013,6 @@
       var container = document.getElementById("single-question-container");
       container.innerHTML = "";
 
-      // 1. Dạng Sắp xếp chữ cái
       if (q.type === "scramble") {
         var html = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:8px;'>Sắp xếp các chữ cái sau thành từ vựng đúng:</div>";
         html += "<div class='scramble-badges'>";
@@ -1000,17 +1021,14 @@
         });
         html += "</div>";
 
-        // Chỉ hiển thị phiên âm IPA, không hiển thị chữ chú thích "Phiên âm IPA:"
         html += "<div><span class='ipa-badge-box'>" + q.item.ipa + "</span></div>";
 
-        // Nút gợi ý 1 & gợi ý 2
         var hState = hintStateMap[index] || { hint1: false, hint2: false };
         html += "<div style='display:flex; justify-content:center; gap:10px; margin-top:14px;'>";
         html += "<button class='btn-hint" + (hState.hint1 ? " active" : "") + "' onclick='toggleHint1(" + index + ")'>💡 Gợi ý 1</button>";
         html += "<button class='btn-hint" + (hState.hint2 ? " active" : "") + "' onclick='toggleHint2(" + index + ")'>💡 Gợi ý 2</button>";
         html += "</div>";
 
-        // Khung hiển thị nội dung gợi ý
         html += "<div id='scramble-hint1-box-" + index + "' class='hint-content-box' style='display:" + (hState.hint1 ? "block" : "none") + ";'>";
         html += "<b>Gợi ý 1 (Định nghĩa tiếng Anh):</b> <i>\"" + q.item.defEn + "\"</i>";
         html += "</div>";
@@ -1019,17 +1037,13 @@
         html += "<b>Gợi ý 2 (Định nghĩa tiếng Việt):</b> " + q.item.defVi;
         html += "</div>";
 
-        // Ô nhập đánh máy
         html += "<div style='width:100%; max-width:420px; margin-top:16px;'>";
         html += "<input type='text' id='scramble-input-q' class='input-word-field' style='width:100%; text-align:center; font-weight:700; font-size:1.15rem;' placeholder='Nhập đáp án đánh máy...' value='" + (userCustomAnswers[index] || "") + "' oninput='saveCustomAnswer(" + index + ", this.value.trim().toUpperCase())'>";
         html += "</div>";
         container.innerHTML = html;
       } 
-
-      // 2. Dạng Điền khuyết 1 chữ cái (Hoàn toàn không có gợi ý nào)
       else if (q.type === "fill") {
         var fHtml = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:12px;'>Chọn chữ cái còn thiếu tại ô [ ? ] để hoàn thành từ:</div>";
-        
         fHtml += "<div class='inline-fill-word'>";
         var currentChosen = userCustomAnswers[index] || "";
 
@@ -1051,8 +1065,6 @@
         fHtml += "</div>";
         container.innerHTML = fHtml;
       } 
-
-      // 3. Dạng Trắc nghiệm định nghĩa
       else if (q.type === "mcq") {
         var mHtml = "<div style='width:100%; text-align:left;'>";
         mHtml += "<div style='display:flex; justify-content:space-between; align-items:flex-start; gap:10px;'>";
@@ -1075,12 +1087,10 @@
       }
     }
 
-    // Xử lý Gợi ý 1 (Định nghĩa tiếng Anh) cho câu Sắp xếp chữ
     function toggleHint1(idx) {
       if (!hintStateMap[idx]) hintStateMap[idx] = { hint1: false, hint2: false };
       var box = document.getElementById("scramble-hint1-box-" + idx);
       if (!box) return;
-
       if (!hintStateMap[idx].hint1) {
         hintStateMap[idx].hint1 = true;
         usedHintsCount++;
@@ -1092,12 +1102,10 @@
       renderSingleReviewQuestion(idx);
     }
 
-    // Xử lý Gợi ý 2 (Định nghĩa tiếng Việt) cho câu Sắp xếp chữ
     function toggleHint2(idx) {
       if (!hintStateMap[idx]) hintStateMap[idx] = { hint1: false, hint2: false };
       var box = document.getElementById("scramble-hint2-box-" + idx);
       if (!box) return;
-
       if (!hintStateMap[idx].hint2) {
         hintStateMap[idx].hint2 = true;
         usedHintsCount++;
@@ -1135,7 +1143,6 @@
       if (!hintStateMap[idx]) hintStateMap[idx] = {};
       var hBox = document.getElementById("mcq-hint-box-" + idx);
       if (!hBox) return;
-
       if (hBox.style.display === "block") {
         hBox.style.display = "none";
         hintStateMap[idx].mcqHint = false;
@@ -1176,7 +1183,7 @@
       showScreen("screen-review-result");
     }
 
-    // ================= PHÂN HỆ ĐẤU TRƯỜNG ================= //
+    // ================= PHÂN HỆ ĐẤU TRƯỜNG (TỪNG CÂU MỘT) ================= //
     function openArenaLobby() {
       var nameVal = document.getElementById("student-name").value.trim();
       var classVal = document.getElementById("student-class").value.trim();
@@ -1208,11 +1215,15 @@
       var examKeys = Object.keys(ARENA_EXAMS);
       activeExamKey = examKeys[Math.floor(Math.random() * examKeys.length)];
       activeQuestions = ARENA_EXAMS[activeExamKey];
+      
       document.getElementById("arena-exam-name").innerText = "(" + activeExamKey + ")";
       arenaUserAnswers = {};
+      currentArenaQuestionIdx = 0;
       arenaTimeRemaining = ARENA_DURATION_MINUTES * 60;
+      
       startArenaTimer();
-      renderArenaQuestions();
+      renderArenaNavigationGrid();
+      renderSingleArenaQuestion(0);
       showScreen("screen-arena-board");
     }
 
@@ -1231,36 +1242,107 @@
       }, 1000);
     }
 
-    function renderArenaQuestions() {
-      var container = document.getElementById("arena-questions-container");
-      container.innerHTML = "";
-      activeQuestions.forEach(function(q, index) {
-        var qBox = document.createElement("div");
-        qBox.style.background = "#f8fafc";
-        qBox.style.border = "1.5px solid #e2e8f0";
-        qBox.style.borderRadius = "16px";
-        qBox.style.padding = "18px";
-        qBox.style.marginBottom = "18px";
-        var html = "<h4>Câu " + (index + 1) + ": " + q.question + "</h4>";
-        if (q.type === "mcq") {
-          html += "<div class='quiz-options'>";
-          q.options.forEach(function(opt) {
-            html += "<button class='quiz-opt-btn' onclick='arenaUserAnswers[" + q.id + "]=\"" + opt + "\"; this.parentElement.querySelectorAll(\".quiz-opt-btn\").forEach(function(b){b.classList.remove(\"selected\")}); this.classList.add(\"selected\");'>" + opt + "</button>";
-          });
-          html += "</div>";
-        } else if (q.type === "tf") {
-          html += "<div style='display:flex; gap:12px; margin-top:14px;'>" +
-                  "<button class='quiz-opt-btn' style='flex:1; text-align:center;' onclick='arenaUserAnswers[" + q.id + "]= \"Đúng\"; this.parentElement.querySelectorAll(\".quiz-opt-btn\").forEach(function(b){b.classList.remove(\"selected\")}); this.classList.add(\"selected\");'>✔️ ĐÚNG</button>" +
-                  "<button class='quiz-opt-btn' style='flex:1; text-align:center;' onclick='arenaUserAnswers[" + q.id + "]= \"Sai\"; this.parentElement.querySelectorAll(\".quiz-opt-btn\").forEach(function(b){b.classList.remove(\"selected\")}); this.classList.add(\"selected\");'>✖️ SAI</button>" +
-                  "</div>";
-        } else if (q.type === "num") {
-          html += "<div style='margin-top:14px;'>" +
-                  "<input type='number' class='form-control' placeholder='Nhập kết quả số...' onchange='arenaUserAnswers[" + q.id + "] = this.value.trim()'>" +
-                  "</div>";
+    function renderArenaNavigationGrid() {
+      var grid = document.getElementById("arena-nav-grid");
+      grid.innerHTML = "";
+      for (var i = 0; i < activeQuestions.length; i++) {
+        var btn = document.createElement("button");
+        btn.className = "q-step-btn" + (i === 0 ? " current" : "");
+        btn.id = "arena-step-" + i;
+        btn.innerText = (i + 1);
+        btn.onclick = (function(idx) {
+          return function() { renderSingleArenaQuestion(idx); };
+        })(i);
+        grid.appendChild(btn);
+      }
+    }
+
+    function renderSingleArenaQuestion(index) {
+      currentArenaQuestionIdx = index;
+      var q = activeQuestions[index];
+      var total = activeQuestions.length;
+
+      document.getElementById("arena-q-counter").innerText = "Câu " + (index + 1) + " / " + total;
+
+      for (var i = 0; i < total; i++) {
+        var stepBtn = document.getElementById("arena-step-" + i);
+        if (stepBtn) {
+          stepBtn.classList.remove("current");
+          if (arenaUserAnswers[activeQuestions[i].id] !== undefined && arenaUserAnswers[activeQuestions[i].id] !== "") {
+            stepBtn.classList.add("done");
+          }
         }
-        qBox.innerHTML = html;
-        container.appendChild(qBox);
-      });
+      }
+      var curBtn = document.getElementById("arena-step-" + index);
+      if (curBtn) curBtn.classList.add("current");
+
+      document.getElementById("btn-arena-prev-q").style.visibility = (index === 0) ? "hidden" : "visible";
+      if (index === total - 1) {
+        document.getElementById("btn-arena-next-q").style.display = "none";
+        document.getElementById("btn-arena-submit-q").style.display = "inline-block";
+      } else {
+        document.getElementById("btn-arena-next-q").style.display = "inline-block";
+        document.getElementById("btn-arena-submit-q").style.display = "none";
+      }
+
+      var container = document.getElementById("arena-single-question-container");
+      container.innerHTML = "";
+
+      var html = "<div style='width:100%; text-align:left;'>";
+      html += "<h3 style='font-size:1.15rem; color:#0f172a; margin-bottom:16px;'>" + (index + 1) + ". " + q.question + "</h3>";
+
+      var currentVal = arenaUserAnswers[q.id];
+
+      if (q.type === "mcq") {
+        html += "<div class='quiz-options'>";
+        q.options.forEach(function(opt) {
+          var isSel = (currentVal === opt) ? " selected" : "";
+          html += "<button class='quiz-opt-btn" + isSel + "' onclick='selectArenaOption(" + q.id + ", \"" + opt + "\", this)'>" + opt + "</button>";
+        });
+        html += "</div>";
+      } else if (q.type === "tf") {
+        var isTrue = (currentVal === "Đúng") ? " selected" : "";
+        var isFalse = (currentVal === "Sai") ? " selected" : "";
+        html += "<div style='display:flex; gap:14px; margin-top:16px;'>" +
+                "<button class='quiz-opt-btn" + isTrue + "' style='flex:1; text-align:center; font-size:1.05rem;' onclick='selectArenaOption(" + q.id + ", \"Đúng\", this)'>✔️ ĐÚNG</button>" +
+                "<button class='quiz-opt-btn" + isFalse + "' style='flex:1; text-align:center; font-size:1.05rem;' onclick='selectArenaOption(" + q.id + ", \"Sai\", this)'>✖️ SAI</button>" +
+                "</div>";
+      } else if (q.type === "num") {
+        var numVal = currentVal || "";
+        html += "<div style='margin-top:16px; max-width:320px;'>" +
+                "<input type='number' class='form-control' style='font-size:1.1rem; font-weight:700;' placeholder='Nhập kết quả số...' value='" + numVal + "' oninput='saveArenaNumber(" + q.id + ", this.value.trim())'>" +
+                "</div>";
+      }
+
+      html += "</div>";
+      container.innerHTML = html;
+    }
+
+    function selectArenaOption(qId, val, btnElem) {
+      arenaUserAnswers[qId] = val;
+      var parent = btnElem.parentElement;
+      var allBtns = parent.querySelectorAll(".quiz-opt-btn");
+      for (var i = 0; i < allBtns.length; i++) allBtns[i].classList.remove("selected");
+      btnElem.classList.add("selected");
+      
+      var stepBtn = document.getElementById("arena-step-" + currentArenaQuestionIdx);
+      if (stepBtn) stepBtn.classList.add("done");
+    }
+
+    function saveArenaNumber(qId, val) {
+      arenaUserAnswers[qId] = val;
+      var stepBtn = document.getElementById("arena-step-" + currentArenaQuestionIdx);
+      if (stepBtn) {
+        if (val !== "") stepBtn.classList.add("done");
+        else stepBtn.classList.remove("done");
+      }
+    }
+
+    function navArenaQuestion(step) {
+      var nextIdx = currentArenaQuestionIdx + step;
+      if (nextIdx >= 0 && nextIdx < activeQuestions.length) {
+        renderSingleArenaQuestion(nextIdx);
+      }
     }
 
     function submitArena() {
@@ -1275,6 +1357,7 @@
       var timeSpentMins = Math.floor((ARENA_DURATION_MINUTES * 60 - arenaTimeRemaining) / 60);
       var timeSpentSecs = (ARENA_DURATION_MINUTES * 60 - arenaTimeRemaining) % 60;
       var timeSpentStr = timeSpentMins + "m " + timeSpentSecs + "s";
+      
       document.getElementById("arena-result-exam-label").innerText = "Đề thi: " + activeExamKey;
       document.getElementById("arena-score-display").innerText = correctCount + " / 10";
       document.getElementById("arena-mark-display").innerText = "Điểm: " + score;
@@ -1297,7 +1380,8 @@
       }
     }
 
-    // Tự động khởi tạo từ vựng đầu tiên
+    // Tự động khởi tạo ngay lập tức khi tải xong trang
+    updateVisitorCount();
     renderVocabCard(0);
   </script>
 </body>
