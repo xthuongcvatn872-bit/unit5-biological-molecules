@@ -618,4 +618,535 @@
   <script>
     var GOOGLE_SHEET_API_URL = "https://script.google.com/macros/s/AKfycby_SAMPLE_CODE/exec";
 
-    // 23 Thuật ngữ Unit 5: Biological Molecules
+    // 23 Thuật ngữ Unit 5: Biological Molecules[cite: 1, 2, 3]
+    var VOCABULARY_DATA = [
+      { id: 1, code: "001_Ribonucleic_acid", word: "Ribonucleic acid", ipa: "/ˌraɪbəʊnjuːˌkliːɪk ˈæsɪd/", defEn: "A nucleic acid essential for protein synthesis.", defVi: "Nucleic acid cần cho quá trình tổng hợp protein." },
+      { id: 2, code: "002_DNA", word: "DNA", ipa: "/ˌdiː.enˈeɪ/", defEn: "Molecule carrying genetic instructions for living organisms.", defVi: "Phân tử mang thông tin di truyền của sinh vật." },
+      { id: 3, code: "003_RNA", word: "RNA", ipa: "/ˌɑː.enˈeɪ/", defEn: "Single-stranded nucleic acid involved in protein synthesis.", defVi: "Nucleic acid mạch đơn tham gia tổng hợp protein." },
+      { id: 4, code: "004_Polynucleotide", word: "Polynucleotide", ipa: "/ˌpɒlinjuːkliətaɪd/", defEn: "A chain of linked nucleotide units.", defVi: "Chuỗi gồm nhiều nucleotide liên kết với nhau." },
+      { id: 5, code: "005_Nitrogenous_base", word: "Nitrogenous base", ipa: "/naɪˈtrɒdʒɪnəs beɪs/", defEn: "A nitrogen-containing building block of nucleic acids.", defVi: "Base chứa nitrogen cấu tạo nên nucleic acid." },
+      { id: 6, code: "006_Ribose", word: "Ribose", ipa: "/ˈraɪbəʊs/", defEn: "A five-carbon sugar found in RNA.", defVi: "Loại đường 5 carbon cấu tạo nên RNA." },
+      { id: 7, code: "007_Carbon", word: "Carbon", ipa: "/ˈkɑːbən/", defEn: "The primary element forming organic molecules.", defVi: "Nguyên tố chính tạo nên các phân tử hữu cơ." },
+      { id: 8, code: "008_Phosphate", word: "Phosphate", ipa: "/ˈfɒsfeɪt/", defEn: "Chemical group forming the nucleic acid backbone.", defVi: "Nhóm hóa học tạo nên khung của nucleic acid." },
+      { id: 9, code: "009_Adenine", word: "Adenine", ipa: "/ˈædəniːn/", defEn: "Purine base pairing with thymine or uracil.", defVi: "Base nhóm purine bắt cặp với thymine hoặc uracil." },
+      { id: 10, code: "010_Guanine", word: "Guanine", ipa: "/ˈɡwɑːniːn/", defEn: "Purine base pairing with cytosine.", defVi: "Base nhóm purine bắt cặp với cytosine." },
+      { id: 11, code: "011_Cytosine", word: "Cytosine", ipa: "/ˈsaɪtəsiːn/", defEn: "Pyrimidine base pairing with guanine.", defVi: "Base nhóm pyrimidine bắt cặp với guanine." },
+      { id: 12, code: "012_Uracil", word: "Uracil", ipa: "/ˈjʊərəsɪl/", defEn: "Pyrimidine base unique to RNA.", defVi: "Base nhóm pyrimidine chỉ có trong RNA." },
+      { id: 13, code: "013_Thymine", word: "Thymine", ipa: "/ˈθaɪmiːn/", defEn: "Pyrimidine base unique to DNA.", defVi: "Base nhóm pyrimidine chỉ có trong DNA." },
+      { id: 14, code: "014_Hydrogen", word: "Hydrogen", ipa: "/ˈhaɪdrədʒən/", defEn: "Chemical element forming stabilizing bonds in biomolecules.", defVi: "Nguyên tố tạo liên kết làm bền phân tử sinh học." },
+      { id: 15, code: "015_Ribosome", word: "Ribosome", ipa: "/ˈraɪbəsəʊm/", defEn: "Cellular structure that synthesizes proteins.", defVi: "Cấu trúc tế bào thực hiện tổng hợp protein." },
+      { id: 16, code: "016_Amino_acid", word: "Amino acid", ipa: "/əˌmiːnəʊ ˈæsɪd/", defEn: "A monomer building block of proteins.", defVi: "Đơn phân cấu tạo nên chuỗi protein." },
+      { id: 17, code: "017_Protein", word: "Protein", ipa: "/ˈprəʊtiːn/", defEn: "A macromolecule composed of amino acids.", defVi: "Đại phân tử sinh học cấu tạo từ các amino acid." },
+      { id: 18, code: "018_Gene", word: "Gene", ipa: "/dʒiːn/", defEn: "A DNA sequence encoding a functional product.", defVi: "Đoạn trình tự DNA mã hóa cho sản phẩm chức năng." },
+      { id: 19, code: "019_Enzyme", word: "Enzyme", ipa: "/ˈenzaɪm/", defEn: "A biological catalyst accelerating chemical reactions.", defVi: "Chất xúc tác sinh học làm tăng tốc độ phản ứng." },
+      { id: 20, code: "020_Ribozyme", word: "Ribozyme", ipa: "/ˈraɪbəzaɪm/", defEn: "An RNA molecule with catalytic activity.", defVi: "Phân tử RNA có hoạt tính xúc tác." },
+      { id: 21, code: "021_Purine", word: "Purine", ipa: "/ˈpjʊəriːn/", defEn: "A double-ring nitrogenous base group.", defVi: "Nhóm base chứa nitrogen có cấu trúc hai vòng." },
+      { id: 22, code: "022_Uric_acid", word: "Uric acid", ipa: "/ˌjʊərɪk ˈæsɪd/", defEn: "A waste product of purine breakdown.", defVi: "Sản phẩm bài tiết từ quá trình chuyển hóa purine." },
+      { id: 23, code: "023_Gout", word: "Gout", ipa: "/ɡaʊt/", defEn: "Arthritis caused by urate crystal buildup.", defVi: "Bệnh viêm khớp do tích tụ tinh thể urate." }
+    ];
+
+    var VALID_CODES = ["10A1", "10A2", "TUDO"];
+    var ARENA_DURATION_MINUTES = 10;
+
+    // Ngân hàng 3 Bộ đề kiểm tra cuối giờ
+    var ARENA_EXAMS = {
+      "Bộ đề 1": [
+        { id: 1, type: "mcq", question: "Mỗi nucleotide của RNA chứa loại đường 5 - carbon nào?", options: ["Deoxyribose", "Ribose", "Glucose", "Fructose"], answer: "Ribose" },
+        { id: 2, type: "mcq", question: "Phân tử RNA nào làm khuôn để tổng hợp protein ở ribosome?", options: ["mRNA", "tRNA", "rRNA", "Ribozyme"], answer: "mRNA" },
+        { id: 3, type: "mcq", question: "Base nào sau đây tham gia cấu tạo RNA nhưng không có ở DNA?", options: ["Adenine", "Uracil", "Guanine", "Cytosine"], answer: "Uracil" },
+        { id: 4, type: "mcq", question: "Ở tRNA, các vùng tự bắt đôi liên kết với nhau bằng loại liên kết nào?", options: ["Peptide", "Glycosidic", "Hydrogen", "Phosphodiester"], answer: "Hydrogen" },
+        { id: 5, type: "mcq", question: "So với DNA, RNA có đặc điểm cấu trúc nào sau đây?", options: ["Luôn có 2 chuỗi xoắn kép", "Chứa đường deoxyribose", "Chủ yếu gồm 1 chuỗi polynucleotide", "Chứa base Thymine"], answer: "Chủ yếu gồm 1 chuỗi polynucleotide" },
+        { id: 6, type: "tf", question: "Nhận định: mRNA chỉ gồm một chuỗi polynucleotide dạng mạch thẳng.", answer: "Đúng" },
+        { id: 7, type: "tf", question: "Nhận định: Ribozyme là phân tử RNA có khả năng xúc tác hóa học như enzyme.", answer: "Đúng" },
+        { id: 8, type: "tf", question: "Nhận định: Giống như DNA, trong phân tử RNA số lượng nucleotide A luôn bằng U.", answer: "Sai" },
+        { id: 9, type: "num", question: "Mỗi nucleotide cấu tạo nên RNA được tạo thành từ bao nhiêu thành phần hóa học?", answer: "3" },
+        { id: 10, type: "num", question: "Giữa một cặp base liên kết bổ sung Guanine (G) và Cytosine (C) trên phân tử tRNA có bao nhiêu liên kết hydrogen?", answer: "3" }
+      ],
+      "Bộ đề 2": [
+        { id: 1, type: "mcq", question: "Phân tử RNA nào tham gia cấu tạo nên bào quan ribosome?", options: ["mRNA", "tRNA", "rRNA", "Ribozyme"], answer: "rRNA" },
+        { id: 2, type: "mcq", question: "Phân tử RNA làm nhiệm vụ vận chuyển amino acid đến ribosome là?", options: ["tRNA", "mRNA", "rRNA", "RNA nhỏ"], answer: "tRNA" },
+        { id: 3, type: "mcq", question: "Vị trí trên tRNA khớp bổ sung với mã sao trên mRNA gọi là gì?", options: ["Vị trí gắn amino acid", "Bộ ba đối mã", "Bộ khung đường", "Gốc phosphate"], answer: "Bộ ba đối mã" },
+        { id: 4, type: "mcq", question: "Cấu trúc phân tử DNA khác với RNA ở đặc điểm nào sau đây?", options: ["Cấu tạo theo nguyên tắc đa phân", "Gồm hai chuỗi polynucleotide", "Đơn phân có gốc phosphate", "Có chứa base Adenine"], answer: "Gồm hai chuỗi polynucleotide" },
+        { id: 5, type: "mcq", question: "Các phân tử RNA nhỏ trong tế bào đảm nhận chức năng nào?", options: ["Làm khuôn dịch mã", "Vận chuyển amino acid", "Cấu tạo ribosome", "Điều hoà hoạt động gene"], answer: "Điều hoà hoạt động gene" },
+        { id: 6, type: "tf", question: "Nhận định: Đa số các loại phân tử RNA được cấu tạo từ hai chuỗi xoắn kép.", answer: "Sai" },
+        { id: 7, type: "tf", question: "Nhận định: Trên phân tử tRNA có vị trí đặc hiệu để gắn kết với amino acid.", answer: "Đúng" },
+        { id: 8, type: "tf", question: "Nhận định: Trong tế bào sống, mọi phân tử có chức năng xúc tác đều là protein.", answer: "Sai" },
+        { id: 9, type: "num", question: "Có bao nhiêu loại nitrogenous base chính tham gia cấu tạo nên phân tử RNA?", answer: "4" },
+        { id: 10, type: "num", question: "Giữa một cặp base liên kết bổ sung Adenine (A) và Uracil (U) trên phân tử tRNA có bao nhiêu liên kết hydrogen?", answer: "2" }
+      ],
+      "Bộ đề 3": [
+        { id: 1, type: "mcq", question: "Đơn phân của RNA không có loại nitrogenous base nào sau đây?", options: ["Adenine", "Uracil", "Guanine", "Thymine"], answer: "Thymine" },
+        { id: 2, type: "mcq", question: "Loại mô động vật nào chứa rất nhiều DNA thường dùng để tách chiết?", options: ["Mô gan", "Mô mỡ", "Mô xương", "Biểu bì"], answer: "Mô gan" },
+        { id: 3, type: "mcq", question: "Yếu tố nào giúp tRNA có cấu trúc không gian 3 chiều đặc trưng?", options: ["Mạch thẳng dài", "Các vùng tự bắt đôi bổ sung", "Chứa đường glucose", "Có cấu trúc 2 mạch"], answer: "Các vùng tự bắt đôi bổ sung" },
+        { id: 4, type: "mcq", question: "Điểm khác biệt về loại đường giữa phân tử DNA và RNA là?", options: ["DNA chứa deoxyribose, RNA chứa ribose", "DNA chứa ribose, RNA chứa deoxyribose", "DNA chứa glucose, RNA chứa ribose", "DNA chứa fructose, RNA chứa glucose"], answer: "DNA chứa deoxyribose, RNA chứa ribose" },
+        { id: 5, type: "mcq", question: "Khi bị rối loạn chuyển hoá, ăn nhiều thức ăn giàu nucleic acid dễ gây bệnh gì?", options: ["Bướu cổ", "Tiểu đường", "Bệnh gút (goute)", "Béo phì"], answer: "Bệnh gút (goute)" },
+        { id: 6, type: "tf", question: "Nhận định: Tất cả các loại phân tử RNA trong tế bào đều chỉ có dạng mạch thẳng.", answer: "Sai" },
+        { id: 7, type: "tf", question: "Nhận định: Ở tRNA, các vùng tự bắt đôi liên kết theo kiểu A – U và G – C.", answer: "Đúng" },
+        { id: 8, type: "tf", question: "Nhận định: So với protein, phân tử DNA đảm nhận nhiều loại chức năng hơn.", answer: "Sai" },
+        { id: 9, type: "num", question: "Đường ribose trong đơn phân nucleotide của RNA có bao nhiêu nguyên tử carbon?", answer: "5" },
+        { id: 10, type: "num", question: "Phân tử DNA thường gồm 2 chuỗi polynucleotide, vậy RNA thông thường được cấu tạo từ bao nhiêu chuỗi polynucleotide?", answer: "1" }
+      ]
+    };
+
+    var currentUser = { name: "Nguyễn Minh Thư", className: "10A1" };
+    var currentVocabIndex = 0;
+
+    // Biến cho Luyện tập nâng cấp
+    var customQuestions = [];
+    var currentQuestionIdx = 0;
+    var userCustomAnswers = {};
+    var usedHintsCount = 0;
+    var hintedQuestionsMap = {};
+
+    // Biến Đấu trường
+    var activeExamKey = "";
+    var activeQuestions = [];
+    var arenaUserAnswers = {};
+    var arenaTimerInterval = null;
+    var arenaTimeRemaining = ARENA_DURATION_MINUTES * 60;
+    var enteredRoomCode = "";
+
+    function showScreen(screenId) {
+      var panels = document.querySelectorAll(".screen-panel");
+      for (var i = 0; i < panels.length; i++) {
+        panels[i].classList.remove("active");
+      }
+      var target = document.getElementById(screenId);
+      if (target) target.classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    function handleStartLearning() {
+      var nameVal = document.getElementById("student-name").value.trim();
+      var classVal = document.getElementById("student-class").value.trim();
+      currentUser.name = nameVal || "Nguyễn Minh Thư";
+      currentUser.className = classVal || "10A1";
+      showScreen("screen-vocab");
+      renderVocabCard(0);
+    }
+
+    function renderVocabCard(index) {
+      currentVocabIndex = index;
+      var item = VOCABULARY_DATA[index];
+      document.getElementById("vocab-counter").innerText = (index + 1) + " / " + VOCABULARY_DATA.length;
+      
+      document.getElementById("vocab-img").src = item.code + ".png";
+      
+      var audioElem = document.getElementById("vocab-audio");
+      audioElem.src = item.code + ".mp3";
+      audioElem.load();
+      
+      var videoElem = document.getElementById("vocab-video");
+      videoElem.src = item.code + ".mp4";
+      videoElem.load();
+      
+      var btnPrev = document.getElementById("btn-prev-vocab");
+      btnPrev.disabled = (index === 0);
+      btnPrev.style.opacity = (index === 0) ? "0.4" : "1";
+      
+      var btnNext = document.getElementById("btn-next-vocab");
+      btnNext.disabled = (index === VOCABULARY_DATA.length - 1);
+      btnNext.style.opacity = (index === VOCABULARY_DATA.length - 1) ? "0.4" : "1";
+
+      renderScrambleBadges(item.word);
+    }
+
+    function goToPrevVocab() {
+      if (currentVocabIndex > 0) renderVocabCard(currentVocabIndex - 1);
+    }
+
+    function goToNextVocab() {
+      if (currentVocabIndex < VOCABULARY_DATA.length - 1) renderVocabCard(currentVocabIndex + 1);
+    }
+
+    function renderScrambleBadges(rawWord) {
+      var cleanWord = rawWord.toUpperCase().replace(/\s+/g, '');
+      var shuffled = cleanWord.split('').sort(function() { return Math.random() - 0.5; });
+      var container = document.getElementById("scramble-badges-container");
+      container.innerHTML = "";
+      shuffled.forEach(function(char) {
+        var badge = document.createElement("div");
+        badge.className = "letter-badge";
+        badge.innerText = char;
+        container.appendChild(badge);
+      });
+      document.getElementById("input-check-word").value = "";
+      document.getElementById("check-feedback").innerHTML = "";
+    }
+
+    function checkUserSpelling() {
+      var inputVal = document.getElementById("input-check-word").value.trim().toUpperCase().replace(/\s+/g, '');
+      var correctVal = VOCABULARY_DATA[currentVocabIndex].word.toUpperCase().replace(/\s+/g, '');
+      var feedback = document.getElementById("check-feedback");
+      if (!inputVal) {
+        feedback.innerHTML = "<span style='color:#ef4444;'>Vui lòng gõ từ hoàn chỉnh vào ô trên!</span>";
+        return;
+      }
+      if (inputVal === correctVal) {
+        feedback.innerHTML = "<span style='color:#059669;'>🎉 Chính xác! Em đã nhớ đúng từ vựng này.</span>";
+      } else {
+        feedback.innerHTML = "<span style='color:#ef4444;'>❌ Chưa chính xác, hãy thử lại nhé!</span>";
+      }
+    }
+
+    // ================= PHÂN HỆ LUYỆN TẬP TỔNG HỢP MỚI ================= //
+    function openReviewLobby() {
+      showScreen("screen-review-setup");
+    }
+
+    function startCustomReviewQuiz() {
+      var count = parseInt(document.getElementById("review-count-select").value, 10);
+      var numScramble = Math.round(count * 0.3); // 3 hoặc 6
+      var numFill = Math.round(count * 0.3);     // 3 hoặc 6
+      var numMcq = count - numScramble - numFill; // 4 hoặc 8
+
+      var pool = VOCABULARY_DATA.slice().sort(function() { return Math.random() - 0.5; });
+      customQuestions = [];
+      userCustomAnswers = {};
+      usedHintsCount = 0;
+      hintedQuestionsMap = {};
+      currentQuestionIdx = 0;
+
+      var pIdx = 0;
+      // 1. Sắp xếp chữ cái (Lộn xộn ở trên, gõ máy ở dưới)
+      for (var i = 0; i < numScramble; i++) {
+        var item = pool[pIdx++];
+        var cleanW = item.word.toUpperCase().replace(/\s+/g, '');
+        var shuf = cleanW.split('').sort(function() { return Math.random() - 0.5; });
+        customQuestions.push({
+          type: "scramble",
+          item: item,
+          shuffledLetters: shuf,
+          correctWord: cleanW
+        });
+      }
+
+      // 2. Điền khuyết 1 chữ cái (Thanh gợi ý sổ xuống)
+      for (var j = 0; j < numFill; j++) {
+        var fItem = pool[pIdx++];
+        var letters = fItem.word.toUpperCase().split('');
+        // Tìm các vị trí là chữ cái (không phải khoảng trắng)
+        var validPos = [];
+        for (var k = 0; k < letters.length; k++) {
+          if (letters[k] >= 'A' && letters[k] <= 'Z') validPos.push(k);
+        }
+        var blankPos = validPos[Math.floor(Math.random() * validPos.length)];
+        var missingChar = letters[blankPos];
+        var maskedWord = letters.slice();
+        maskedWord[blankPos] = "_";
+
+        // Tạo 4 phương án cho dropdown
+        var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var optionsSet = [missingChar];
+        while (optionsSet.length < 4) {
+          var randChar = alphabet[Math.floor(Math.random() * alphabet.length)];
+          if (optionsSet.indexOf(randChar) === -1) optionsSet.push(randChar);
+        }
+        optionsSet.sort(function() { return Math.random() - 0.5; });
+
+        customQuestions.push({
+          type: "fill",
+          item: fItem,
+          maskedWord: maskedWord.join(' '),
+          missingChar: missingChar,
+          charOptions: optionsSet
+        });
+      }
+
+      // 3. Trắc nghiệm định nghĩa tiếng Anh (Kèm nút gợi ý tiếng Việt)
+      for (var m = 0; m < numMcq; m++) {
+        var mItem = pool[pIdx++];
+        var wrongPool = VOCABULARY_DATA.filter(function(v) { return v.id !== mItem.id; })
+                                       .sort(function() { return Math.random() - 0.5; })
+                                       .slice(0, 3);
+        var mcqOpts = [mItem].concat(wrongPool).sort(function() { return Math.random() - 0.5; });
+        customQuestions.push({
+          type: "mcq",
+          item: mItem,
+          options: mcqOpts,
+          correctWord: mItem.word
+        });
+      }
+
+      // Xáo trộn toàn bộ câu hỏi trong đề
+      customQuestions.sort(function() { return Math.random() - 0.5; });
+
+      renderReviewNavigationGrid();
+      renderSingleReviewQuestion(0);
+      showScreen("screen-review-single");
+    }
+
+    function renderReviewNavigationGrid() {
+      var grid = document.getElementById("review-nav-grid");
+      grid.innerHTML = "";
+      for (var i = 0; i < customQuestions.length; i++) {
+        var btn = document.createElement("button");
+        btn.className = "q-step-btn" + (i === 0 ? " current" : "");
+        btn.id = "q-step-" + i;
+        btn.innerText = (i + 1);
+        btn.onclick = (function(idx) {
+          return function() { renderSingleReviewQuestion(idx); };
+        })(i);
+        grid.appendChild(btn);
+      }
+    }
+
+    function renderSingleReviewQuestion(index) {
+      currentQuestionIdx = index;
+      var q = customQuestions[index];
+      var total = customQuestions.length;
+
+      // Cập nhật tiêu đề & thanh số thứ tự
+      document.getElementById("review-q-counter").innerText = "Câu " + (index + 1) + " / " + total;
+      var badge = document.getElementById("review-type-badge");
+      if (q.type === "scramble") badge.innerText = "🧩 Dạng 1: Sắp xếp chữ cái";
+      else if (q.type === "fill") badge.innerText = "✏️ Dạng 2: Điền khuyết 1 chữ cái";
+      else badge.innerText = "🎯 Dạng 3: Chọn thuật ngữ đúng";
+
+      // Cập nhật trạng thái các nút lưới câu
+      for (var i = 0; i < total; i++) {
+        var stepBtn = document.getElementById("q-step-" + i);
+        if (stepBtn) {
+          stepBtn.classList.remove("current");
+          if (userCustomAnswers[i] !== undefined && userCustomAnswers[i] !== "") {
+            stepBtn.classList.add("done");
+          }
+        }
+      }
+      var curBtn = document.getElementById("q-step-" + index);
+      if (curBtn) curBtn.classList.add("current");
+
+      // Cập nhật nút điều hướng
+      document.getElementById("btn-review-prev-q").style.visibility = (index === 0) ? "hidden" : "visible";
+      if (index === total - 1) {
+        document.getElementById("btn-review-next-q").style.display = "none";
+        document.getElementById("btn-review-submit-q").style.display = "inline-block";
+      } else {
+        document.getElementById("btn-review-next-q").style.display = "inline-block";
+        document.getElementById("btn-review-submit-q").style.display = "none";
+      }
+
+      var container = document.getElementById("single-question-container");
+      container.innerHTML = "";
+
+      // Render nội dung theo dạng
+      if (q.type === "scramble") {
+        var html = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:12px;'>Quan sát các chữ cái bị đảo lộn và gõ lại thuật ngữ tiếng Anh chính xác:</div>";
+        html += "<div class='scramble-badges'>";
+        q.shuffledLetters.forEach(function(ch) {
+          html += "<div class='letter-badge'>" + ch + "</div>";
+        });
+        html += "</div>";
+        html += "<div style='width:100%; max-width:420px; margin-top:14px;'>";
+        html += "<input type='text' id='scramble-input-q' class='input-word-field' style='width:100%; text-align:center; font-weight:700; font-size:1.15rem;' placeholder='Nhập đáp án đánh máy...' value='" + (userCustomAnswers[index] || "") + "' oninput='saveCustomAnswer(" + index + ", this.value.trim().toUpperCase())'>";
+        html += "</div>";
+        container.innerHTML = html;
+      } 
+      else if (q.type === "fill") {
+        var fHtml = "<div style='font-size:0.95rem; color:#64748b; margin-bottom:10px;'>Định nghĩa: <i>\"" + q.item.defEn + "\"</i></div>";
+        fHtml += "<div style='font-size:1.7rem; font-weight:800; letter-spacing:4px; color:var(--secondary); margin:12px 0;'>" + q.maskedWord + "</div>";
+        fHtml += "<div style='margin-top:10px;'>";
+        fHtml += "<label style='display:block; font-size:0.9rem; font-weight:700; margin-bottom:6px;'>Chọn chữ cái còn thiếu tại vị trí dấu gạch dưới (_):</label>";
+        fHtml += "<select class='dropdown-select-char' onchange='saveCustomAnswer(" + index + ", this.value)'>";
+        fHtml += "<option value=''>-- Chọn chữ cái ▼ --</option>";
+        q.charOptions.forEach(function(optChar) {
+          var sel = (userCustomAnswers[index] === optChar) ? " selected" : "";
+          fHtml += "<option value='" + optChar + "'" + sel + ">" + optChar + "</option>";
+        });
+        fHtml += "</select>";
+        fHtml += "</div>";
+        container.innerHTML = fHtml;
+      } 
+      else if (q.type === "mcq") {
+        var mHtml = "<div style='width:100%; text-align:left;'>";
+        mHtml += "<div style='display:flex; justify-content:space-between; align-items:flex-start;'>";
+        mHtml += "<div style='font-size:1.1rem; font-weight:700; color:#0f172a;'>Định nghĩa: <span style='color:#0284c7;'>\"" + q.item.defEn + "\"</span></div>";
+        mHtml += "<button class='btn-hint' onclick='toggleQuestionHint(" + index + ")'>💡 Gợi ý</button>";
+        mHtml += "</div>";
+        mHtml += "<div id='hint-box-" + index + "' class='hint-content-box'><b>Gợi ý tiếng Việt:</b> " + q.item.defVi + "</div>";
+        mHtml += "<div class='quiz-options' style='margin-top:16px;'>";
+        q.options.forEach(function(opt) {
+          var isSel = (userCustomAnswers[index] === opt.word) ? " selected" : "";
+          mHtml += "<button class='quiz-opt-btn" + isSel + "' onclick='selectMcqCustom(" + index + ", \"" + opt.word + "\", this)'>" + opt.word + "</button>";
+        });
+        mHtml += "</div></div>";
+        container.innerHTML = mHtml;
+
+        // Nếu câu này trước đó đã bấm mở gợi ý thì giữ hiển thị
+        if (hintedQuestionsMap[index]) {
+          var hBox = document.getElementById("hint-box-" + index);
+          if (hBox) hBox.style.display = "block";
+        }
+      }
+    }
+
+    function saveCustomAnswer(idx, val) {
+      userCustomAnswers[idx] = val;
+      var stepBtn = document.getElementById("q-step-" + idx);
+      if (stepBtn && val !== "") stepBtn.classList.add("done");
+    }
+
+    function selectMcqCustom(idx, val, btnElem) {
+      saveCustomAnswer(idx, val);
+      var parent = btnElem.parentElement;
+      var allBtns = parent.querySelectorAll(".quiz-opt-btn");
+      for (var i = 0; i < allBtns.length; i++) allBtns[i].classList.remove("selected");
+      btnElem.classList.add("selected");
+    }
+
+    function toggleQuestionHint(idx) {
+      var hBox = document.getElementById("hint-box-" + idx);
+      if (!hBox) return;
+      if (hBox.style.display === "block") {
+        hBox.style.display = "none";
+      } else {
+        hBox.style.display = "block";
+        if (!hintedQuestionsMap[idx]) {
+          hintedQuestionsMap[idx] = true;
+          usedHintsCount++;
+        }
+      }
+    }
+
+    function navReviewQuestion(step) {
+      var nextIdx = currentQuestionIdx + step;
+      if (nextIdx >= 0 && nextIdx < customQuestions.length) {
+        renderSingleReviewQuestion(nextIdx);
+      }
+    }
+
+    function submitCustomReview() {
+      var total = customQuestions.length;
+      var correct = 0;
+      for (var i = 0; i < total; i++) {
+        var q = customQuestions[i];
+        var ans = userCustomAnswers[i] || "";
+        if (q.type === "scramble") {
+          if (ans.replace(/\s+/g, '') === q.correctWord) correct++;
+        } else if (q.type === "fill") {
+          if (ans === q.missingChar) correct++;
+        } else if (q.type === "mcq") {
+          if (ans === q.correctWord) correct++;
+        }
+      }
+
+      document.getElementById("review-score-display").innerText = correct + " / " + total;
+      document.getElementById("review-stat-correct").innerText = "• Số câu trả lời đúng: " + correct + " / " + total + " câu";
+      document.getElementById("review-stat-hints").innerText = "• Số lần sử dụng gợi ý (💡): " + usedHintsCount + " lần";
+      showScreen("screen-review-result");
+    }
+
+    // ================= PHÂN HỆ ĐẤU TRƯỜNG ================= //
+    function openArenaLobby() {
+      var nameVal = document.getElementById("student-name").value.trim();
+      var classVal = document.getElementById("student-class").value.trim();
+      currentUser.name = nameVal || currentUser.name || "Nguyễn Minh Thư";
+      currentUser.className = classVal || currentUser.className || "10A1";
+      document.getElementById("arena-user-display").innerText = "Thí sinh: " + currentUser.name + " - Lớp: " + currentUser.className;
+      showScreen("screen-arena-lobby");
+    }
+
+    function startArenaContest() {
+      var code = document.getElementById("arena-code-input").value.trim().toUpperCase();
+      if (VALID_CODES.indexOf(code) === -1) {
+        alert("⚠️ Mã phòng thi không đúng! Vui lòng nhập mã lớp của bạn (10A1, 10A2 hoặc TUDO).");
+        return;
+      }
+      enteredRoomCode = code;
+      var examKeys = Object.keys(ARENA_EXAMS);
+      activeExamKey = examKeys[Math.floor(Math.random() * examKeys.length)];
+      activeQuestions = ARENA_EXAMS[activeExamKey];
+      document.getElementById("arena-exam-name").innerText = "(" + activeExamKey + ")";
+      arenaUserAnswers = {};
+      arenaTimeRemaining = ARENA_DURATION_MINUTES * 60;
+      startArenaTimer();
+      renderArenaQuestions();
+      showScreen("screen-arena-board");
+    }
+
+    function startArenaTimer() {
+      clearInterval(arenaTimerInterval);
+      arenaTimerInterval = setInterval(function() {
+        arenaTimeRemaining--;
+        var mins = Math.floor(arenaTimeRemaining / 60);
+        var secs = arenaTimeRemaining % 60;
+        document.getElementById("arena-timer").innerText = "⏱️ " + mins + ":" + (secs < 10 ? '0' : '') + secs;
+        if (arenaTimeRemaining <= 0) {
+          clearInterval(arenaTimerInterval);
+          alert("Hết giờ thi! Tự động nộp bài.");
+          submitArena();
+        }
+      }, 1000);
+    }
+
+    function renderArenaQuestions() {
+      var container = document.getElementById("arena-questions-container");
+      container.innerHTML = "";
+      activeQuestions.forEach(function(q, index) {
+        var qBox = document.createElement("div");
+        qBox.style.background = "#f8fafc";
+        qBox.style.border = "1.5px solid #e2e8f0";
+        qBox.style.borderRadius = "16px";
+        qBox.style.padding = "18px";
+        qBox.style.marginBottom = "18px";
+        var html = "<h4>Câu " + (index + 1) + ": " + q.question + "</h4>";
+        if (q.type === "mcq") {
+          html += "<div class='quiz-options'>";
+          q.options.forEach(function(opt) {
+            html += "<button class='quiz-opt-btn' onclick='arenaUserAnswers[" + q.id + "]=\"" + opt + "\"; this.parentElement.querySelectorAll(\".quiz-opt-btn\").forEach(function(b){b.classList.remove(\"selected\")}); this.classList.add(\"selected\");'>" + opt + "</button>";
+          });
+          html += "</div>";
+        } else if (q.type === "tf") {
+          html += "<div style='display:flex; gap:12px; margin-top:14px;'>" +
+                  "<button class='quiz-opt-btn' style='flex:1; text-align:center;' onclick='arenaUserAnswers[" + q.id + "]= \"Đúng\"; this.parentElement.querySelectorAll(\".quiz-opt-btn\").forEach(function(b){b.classList.remove(\"selected\")}); this.classList.add(\"selected\");'>✔️ ĐÚNG</button>" +
+                  "<button class='quiz-opt-btn' style='flex:1; text-align:center;' onclick='arenaUserAnswers[" + q.id + "]= \"Sai\"; this.parentElement.querySelectorAll(\".quiz-opt-btn\").forEach(function(b){b.classList.remove(\"selected\")}); this.classList.add(\"selected\");'>✖️ SAI</button>" +
+                  "</div>";
+        } else if (q.type === "num") {
+          html += "<div style='margin-top:14px;'>" +
+                  "<input type='number' class='form-control' placeholder='Nhập kết quả số...' onchange='arenaUserAnswers[" + q.id + "] = this.value.trim()'>" +
+                  "</div>";
+        }
+        qBox.innerHTML = html;
+        container.appendChild(qBox);
+      });
+    }
+
+    function submitArena() {
+      clearInterval(arenaTimerInterval);
+      var correctCount = 0;
+      activeQuestions.forEach(function(q) {
+        var userA = String(arenaUserAnswers[q.id] || "").trim().toLowerCase();
+        var trueA = String(q.answer).trim().toLowerCase();
+        if (userA === trueA) correctCount++;
+      });
+      var score = (correctCount * 1.0).toFixed(1);
+      var timeSpentMins = Math.floor((ARENA_DURATION_MINUTES * 60 - arenaTimeRemaining) / 60);
+      var timeSpentSecs = (ARENA_DURATION_MINUTES * 60 - arenaTimeRemaining) % 60;
+      var timeSpentStr = timeSpentMins + "m " + timeSpentSecs + "s";
+      document.getElementById("arena-result-exam-label").innerText = "Đề thi: " + activeExamKey;
+      document.getElementById("arena-score-display").innerText = correctCount + " / 10";
+      document.getElementById("arena-mark-display").innerText = "Điểm: " + score;
+      showScreen("screen-arena-result");
+
+      if (GOOGLE_SHEET_API_URL.indexOf("SAMPLE_CODE") === -1) {
+        fetch(GOOGLE_SHEET_API_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: currentUser.name,
+            className: currentUser.className,
+            roomCode: enteredRoomCode + " (" + activeExamKey + ")",
+            score: score,
+            correctCount: correctCount,
+            timeSpent: timeSpentStr
+          })
+        });
+      }
+    }
+
+    // Tự động khởi chạy từ vựng đầu tiên
+    renderVocabCard(0);
+  </script>
+</body>
+</html>
