@@ -11,13 +11,10 @@
 </head>
 <body>
 
-  <!-- Thanh Header nổi bật, trang trọng -->
+  <!-- Header chung -->
   <header class="app-header">
     <div class="header-container">
-      <div>
-        <div class="school-badge">TRƯỜNG THPT CHU VĂN AN - THÁI NGUYÊN</div>
-        <div class="unit-title">Unit 5: Biological Molecules</div>
-      </div>
+      <div class="school-badge">TRƯỜNG THPT CHU VĂN AN - THÁI NGUYÊN</div>
       <div class="header-right">
         <div class="views-pill">👁️ Lượt tham gia: <span id="views-count">...</span></div>
         <button id="btn-arena-header" class="btn-arena-nav">⚔️ Đấu trường Sinh học</button>
@@ -29,9 +26,10 @@
     
     <!-- 1. Màn hình Khai báo thông tin học sinh -->
     <section id="screen-welcome" class="screen-panel active">
-      <div class="card-box welcome-card">
-        <h2 style="color: var(--primary); font-size: 1.5rem; margin-bottom: 8px;">Học Thuật Ngữ Sinh Học</h2>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">Vui lòng điền thông tin để bắt đầu bài học</p>
+      <div class="template-card" style="max-width: 480px; margin: 40px auto;">
+        <span class="unit-pill">Unit 5 - Biological molecules</span>
+        <h2 class="site-title">Biology Interactive Learning</h2>
+        <p class="site-sub">Học liệu số & Kiểm tra đánh giá thuật ngữ Sinh học</p>
         
         <div class="form-group" style="margin-top: 24px;">
           <label>Họ và tên học sinh:</label>
@@ -43,66 +41,76 @@
           <input type="text" id="student-class" class="form-control" placeholder="Ví dụ: 10A">
         </div>
         
-        <button id="btn-start-app" class="btn btn-primary" style="width: 100%; margin-top: 10px; padding: 14px; font-size: 1.05rem;">
+        <button id="btn-start-app" class="btn-nav-next" style="width: 100%; padding: 14px; font-size: 1.05rem; margin-top: 10px;">
           🚀 Bắt đầu học bài
         </button>
       </div>
     </section>
 
-    <!-- 2. Màn hình Học từ vựng: Bố cục chữ nhật ngang chia đôi -->
+    <!-- 2. Màn hình Học từ vựng (Thiết kế chuẩn theo mẫu mới) -->
     <section id="screen-vocab" class="screen-panel">
-      <div class="card-box">
+      <div class="template-card">
         
-        <!-- Thanh công cụ trên cùng của thẻ từ -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:12px;">
-          <span id="vocab-counter" style="font-weight:800; font-size:1.15rem; color:var(--primary);">Thuật ngữ 1 / 23</span>
-          <div style="display:flex; gap:10px;">
-            <button id="btn-play-audio" class="btn btn-secondary">🔊 Phát âm</button>
-            <button id="btn-open-review" class="btn btn-accent">📝 Bài tập 20 câu</button>
-          </div>
+        <!-- Tiêu đề trên cùng -->
+        <div>
+          <span class="unit-pill">Unit 5 - Biological molecules</span>
+          <h1 class="site-title">Biology Interactive Learning</h1>
+          <p class="site-sub">Học liệu số & Kiểm tra đánh giá thuật ngữ Sinh học</p>
+          <div class="counter-pill" id="vocab-counter">1 / 23</div>
         </div>
 
-        <!-- Khung chia đôi: Trái (Ảnh + Game) | Phải (Video) -->
-        <div class="vocab-split-grid">
+        <!-- Khung 2 cột cân xứng: Trái (Ảnh + Audio) | Phải (Video) -->
+        <div class="media-grid-pair">
           
-          <!-- Cột bên trái: Ảnh trên + Câu luyện tập dưới -->
-          <div class="col-left">
-            <div class="vocab-image-box">
-              <img id="vocab-img" src="" alt="Infographic thuật ngữ">
+          <!-- Cột bên trái: Ảnh + Audio -->
+          <div class="media-sub-card">
+            <div>
+              <img id="vocab-img" class="vocab-img-display" src="" alt="Infographic thuật ngữ">
             </div>
-
-            <div class="scramble-practice-card">
-              <div>
-                <div class="practice-header">🧩 Thử thách: Sắp xếp chữ cái</div>
-                <div class="practice-subtitle">Nhấp vào các chữ cái theo thứ tự để ghép thành từ đúng:</div>
-                
-                <div class="scramble-inner-box">
-                  <div id="target-slots" class="target-slots"></div>
-                  <div id="letter-tiles" class="letter-tiles"></div>
-                </div>
-              </div>
-
-              <div class="practice-footer">
-                <div id="scramble-feedback" style="font-weight:700; font-size:0.9rem;"></div>
-                <button id="btn-reset-scramble" class="btn btn-secondary" style="padding:6px 14px; font-size:0.85rem;">↺ Xếp lại chữ</button>
-              </div>
+            <div class="audio-player-box">
+              <div class="media-sub-title">📢 Listen & Repeat</div>
+              <audio id="vocab-audio" controls></audio>
             </div>
           </div>
 
-          <!-- Cột bên phải: Video dọc chuẩn tỷ lệ -->
-          <div class="col-right">
-            <div class="video-frame">
+          <!-- Cột bên phải: Video cô giáo đọc -->
+          <div class="media-sub-card">
+            <div class="media-sub-title">🎥 Teacher's Guide</div>
+            <div class="video-player-box">
               <video id="vocab-video" controls playsinline></video>
             </div>
-            <audio id="vocab-audio" style="display:none;"></audio>
           </div>
 
         </div>
 
-        <!-- Thanh điều hướng lật từ -->
-        <div class="nav-row">
-          <button id="btn-prev-vocab" class="btn btn-secondary">⬅️ Thuật ngữ trước</button>
-          <button id="btn-next-vocab" class="btn btn-primary">Thuật ngữ tiếp theo ➡️</button>
+        <!-- Cụm 2 nút chuyển trang: Previous & Next -->
+        <div class="nav-buttons-row">
+          <button id="btn-prev-vocab" class="btn-nav-prev">◄ Previous</button>
+          <button id="btn-next-vocab" class="btn-nav-next">Next ►</button>
+        </div>
+
+        <!-- Khung viền nét đứt: Luyện nhớ từ + Ô nhập + Nút Kiểm tra -->
+        <div class="practice-dashed-box">
+          <div class="practice-title-dashed">✏️ Luyện nhớ từ này: Sắp xếp lại các chữ cái</div>
+          
+          <div id="scramble-badges-container" class="scramble-badges"></div>
+          
+          <div class="check-input-row">
+            <input type="text" id="input-check-word" class="input-word-field" placeholder="Gõ từ hoàn chỉnh...">
+            <button id="btn-check-word" class="btn-check-green">Kiểm tra</button>
+          </div>
+          <div id="check-feedback" style="min-height: 24px; margin-top: 10px; font-weight: 700;"></div>
+        </div>
+
+        <!-- Nút cam dẫn tới bài kiểm tra tổng hợp -->
+        <div>
+          <button id="btn-open-review" class="btn-orange-quiz">
+            🚀 Đi đến Bài kiểm tra tổng hợp Unit 5 (20 câu)
+          </button>
+        </div>
+
+        <div class="page-footer-note">
+          Biology Digital Learning Material • THPT Chu Văn An - Thái Nguyên
         </div>
 
       </div>
@@ -110,21 +118,23 @@
 
     <!-- 3. Màn hình Bài tập tổng hợp 20 câu -->
     <section id="screen-review-quiz" class="screen-panel">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h3 style="color:var(--secondary); font-size:1.3rem;">Bài tập tổng hợp: 20 câu ngẫu nhiên</h3>
-        <button onclick="showScreen('screen-vocab')" class="btn btn-secondary">Quay lại</button>
-      </div>
-      <div id="review-questions-list"></div>
-      <div style="text-align:center; margin:30px 0;">
-        <button id="btn-submit-review" class="btn btn-primary" style="padding:14px 40px; font-size:1.05rem;">
-          ✅ Nộp bài tập tổng hợp
-        </button>
+      <div class="template-card" style="text-align: left;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h3 style="color:var(--secondary); font-size:1.3rem;">Bài tập tổng hợp: 20 câu ngẫu nhiên</h3>
+          <button onclick="showScreen('screen-vocab')" class="btn-nav-prev">Quay lại</button>
+        </div>
+        <div id="review-questions-list"></div>
+        <div style="text-align:center; margin-top:30px;">
+          <button id="btn-submit-review" class="btn-nav-next" style="padding:14px 40px; font-size:1.05rem;">
+            ✅ Nộp bài tập tổng hợp
+          </button>
+        </div>
       </div>
     </section>
 
     <!-- 4. Cổng Đấu trường (Nhập mã 195) -->
     <section id="screen-arena-lobby" class="screen-panel">
-      <div class="card-box arena-card">
+      <div class="template-card" style="max-width: 540px; margin: 30px auto;">
         <h2 style="color:var(--accent); font-size:1.5rem;">⚔️ CỔNG ĐẤU TRƯỜNG SINH HỌC</h2>
         <p id="arena-user-display" style="font-weight:700; margin:12px 0; color:var(--text-muted);"></p>
         <p style="font-size:0.95rem; line-height:1.5;">
@@ -133,10 +143,10 @@
 
         <div style="margin:24px 0;">
           <label style="font-weight:700; display:block; margin-bottom:8px;">Nhập Mã Thi Đấu (Do Giáo viên cấp):</label>
-          <input type="text" id="arena-code-input" class="form-control passcode-input" maxlength="3" placeholder="195">
+          <input type="text" id="arena-code-input" class="form-control" style="font-size:2rem; letter-spacing:10px; text-align:center; max-width:180px; margin:0 auto;" maxlength="3" placeholder="195">
         </div>
 
-        <button id="btn-arena-enter" class="btn btn-accent" style="width:100%; padding:14px; font-size:1.1rem;">
+        <button id="btn-arena-enter" class="btn-orange-quiz" style="width:100%; padding:14px;">
           🚪 Vào phòng thi đấu
         </button>
       </div>
@@ -144,29 +154,28 @@
 
     <!-- 5. Màn hình Đang thi Đấu trường -->
     <section id="screen-arena-board" class="screen-panel">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h3 style="color:var(--accent); font-size:1.3rem;">Đấu trường Sinh học - Unit 5</h3>
-        <div id="arena-timer" style="font-size:1.35rem; font-weight:800; color:var(--danger);">⏱️ 10:00</div>
-      </div>
-
-      <div id="arena-questions-container"></div>
-
-      <div style="text-align:center; margin:30px 0;">
-        <button id="btn-submit-arena" class="btn btn-accent" style="padding:14px 40px; font-size:1.1rem;">
-          🏁 Nộp bài Đấu trường
-        </button>
+      <div class="template-card" style="text-align: left;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h3 style="color:var(--accent); font-size:1.3rem;">Đấu trường Sinh học - Unit 5</h3>
+          <div id="arena-timer" style="font-size:1.35rem; font-weight:800; color:#ef4444;">⏱️ 10:00</div>
+        </div>
+        <div id="arena-questions-container"></div>
+        <div style="text-align:center; margin-top:30px;">
+          <button id="btn-submit-arena" class="btn-orange-quiz" style="padding:14px 40px;">
+            🏁 Nộp bài Đấu trường
+          </button>
+        </div>
       </div>
     </section>
 
     <!-- 6. Màn hình Kết quả Đấu trường -->
     <section id="screen-arena-result" class="screen-panel">
-      <div class="card-box arena-card">
+      <div class="template-card" style="max-width: 500px; margin: 30px auto;">
         <h2 style="color:var(--primary); font-size:1.5rem;">🎉 KẾT QUẢ ĐẤU TRƯỜNG</h2>
         <div style="font-size:3.5rem; font-weight:800; color:var(--primary); margin:20px 0;" id="arena-score-display">0 / 10</div>
         <h3 id="arena-mark-display" style="margin-bottom:12px; color:var(--text-muted);">Điểm: 0.0</h3>
         <p style="color:#059669; font-weight:700; margin-bottom:24px;">✅ Điểm số đã được tự động lưu về Google Sheets của giáo viên!</p>
-        
-        <button onclick="showScreen('screen-vocab')" class="btn btn-primary" style="padding:12px 24px;">
+        <button onclick="showScreen('screen-vocab')" class="btn-nav-next" style="padding:12px 28px;">
           📖 Trở về trang ôn tập từ vựng
         </button>
       </div>
